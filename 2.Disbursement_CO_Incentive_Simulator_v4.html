@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>DO Incentive Simulator | ChokChey Finance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --T:#2EA8A3;--Td:#259F9A;--Tl:#CCF0EE;--Tll:#EAF8F7;
+  --N:#1a2744;--N2:#243055;
+  --P:#F472B6;--Pl:#fce7f3;--Pd:#db2777;
+  --G:#15803D;--Gl:#DCFCE7;
+  --R:#B91C1C;--Rl:#FEE2E2;
+  --A:#D97706;--Al:#FEF3C7;
+  --bg:#F4F5F7;--card:#fff;--border:#E2E8E8;
+  --t1:#111827;--t2:#6B7280;--t3:#9CA3AF;--soft:#F3F4F6;
+  --rB:#F472B6;--rG:rgba(244,114,182,.18);--rBg:#fff8fc;
+  --r:10px;
+}
+html,body{width:100%;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;font-size:14px;-webkit-tap-highlight-color:transparent}
+
+/* HEADER */
+.hdr{background:var(--N);padding:11px 14px;display:flex;align-items:center;justify-content:space-between;position:fixed;top:0;left:0;right:0;z-index:100;box-shadow:0 3px 14px rgba(0,0,0,.28)}
+.hdr-l{display:flex;align-items:center;gap:9px}
+.hdr-badge{width:32px;height:32px;border-radius:8px;background:var(--T);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;flex-shrink:0}
+.hdr-title{font-size:13px;font-weight:700;color:#fff;line-height:1.2}
+.hdr-sub{font-size:9px;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:.9px;margin-top:1px}
+.hdr-r{display:flex;align-items:center;gap:7px}
+.hdr-pill{color:var(--T);font-size:11px;font-weight:700;background:rgba(46,168,163,.12);border:1px solid rgba(46,168,163,.28);padding:4px 10px;border-radius:20px;white-space:nowrap}
+.btn-print{display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap}
+.btn-print:active{background:rgba(255,255,255,.2)}
+
+/* HERO BAR */
+.hero-wrap{position:fixed;top:58px;left:0;right:0;z-index:80;pointer-events:none}
+.hero{background:#fff;padding:10px 16px 12px;pointer-events:all;position:relative;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.07);border-bottom:1px solid #e4f5f4}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--T),var(--P),var(--T))}
+.hero-inner{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.hero-lbl{font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1.4px;margin-bottom:2px}
+.hero-amt{font-size:36px;font-weight:900;color:var(--Td);line-height:1;letter-spacing:-1.5px}
+.hero-note{font-size:10px;color:var(--t3);margin-top:3px}
+
+/* PAGE */
+.page{max-width:500px;margin:0 auto;padding:148px 11px 80px;display:flex;flex-direction:column;gap:10px}
+
+/* CRITERIA OVERVIEW CARD */
+.criteria-card{background:var(--N);border-radius:var(--r);overflow:hidden}
+.criteria-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:transparent;border:none;cursor:pointer;font-family:'Inter',sans-serif;text-align:left}
+.criteria-toggle-l{display:flex;align-items:center;gap:9px}
+.criteria-toggle-title{font-size:13px;font-weight:700;color:#fff}
+.criteria-toggle-sub{font-size:10px;color:rgba(255,255,255,.45);margin-top:1px}
+.crit-arrow{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s}
+.crit-arrow svg{transition:transform .25s}
+.crit-arrow.open{background:var(--T)}
+.crit-arrow.open svg{transform:rotate(180deg)}
+.criteria-body{display:none;padding:0 12px 14px}
+.criteria-body.open{display:block}
+
+/* Criteria rows */
+.crit-section{margin-bottom:10px}
+.crit-section:last-child{margin-bottom:0}
+.crit-section-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.4);margin-bottom:6px;padding-left:2px}
+.crit-row{display:flex;align-items:center;gap:8px;padding:9px 10px;background:rgba(255,255,255,.06);border-radius:8px;border:1px solid rgba(255,255,255,.08);margin-bottom:5px}
+.crit-row:last-child{margin-bottom:0}
+.crit-row.highlight{background:rgba(46,168,163,.18);border-color:rgba(46,168,163,.4)}
+.crit-row.gold{background:rgba(245,158,11,.14);border-color:rgba(245,158,11,.3)}
+.crit-condition{font-size:12px;font-weight:600;color:rgba(255,255,255,.85);flex:1}
+.crit-badge{font-size:13px;font-weight:800;padding:4px 12px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+.crit-badge.base{background:var(--T);color:#fff}
+.crit-badge.irr-hi{background:#10B981;color:#fff}
+.crit-badge.irr-lo{background:var(--A);color:#fff}
+.crit-badge.par{background:var(--T);color:#fff}
+.crit-badge.max{background:linear-gradient(90deg,#F59E0B,#EF4444);color:#fff}
+.crit-arrow-label{font-size:11px;color:rgba(255,255,255,.4);margin:0 2px;flex-shrink:0}
+
+.crit-formula-box{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px 12px;margin-top:8px}
+.crit-formula-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:rgba(255,255,255,.4);margin-bottom:6px}
+.crit-formula-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.cft{font-size:12px;font-weight:700;color:rgba(255,255,255,.75);padding:3px 8px;background:rgba(255,255,255,.08);border-radius:6px}
+.cfo{font-size:13px;font-weight:800;color:rgba(255,255,255,.35)}
+.cf-res{font-size:13px;font-weight:800;color:#fff;padding:4px 10px;background:var(--T);border-radius:6px}
+
+.irr-formula-box{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px 12px;margin-top:8px}
+.irr-formula-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:rgba(255,255,255,.4);margin-bottom:6px}
+.irr-formula-eq{font-size:12px;font-weight:700;color:rgba(255,255,255,.8);line-height:1.8}
+.irr-formula-eq span{color:var(--T)}
+
+/* GUIDE CARD */
+.guide-card{background:var(--N);border-radius:var(--r);overflow:hidden}
+.guide-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:transparent;border:none;cursor:pointer;font-family:'Inter',sans-serif;text-align:left}
+.guide-steps{display:flex;flex-direction:column;gap:0;position:relative;padding-left:32px}
+.guide-steps::before{content:'';position:absolute;left:10px;top:8px;bottom:8px;width:1.5px;background:linear-gradient(to bottom,var(--T),var(--Tl));border-radius:2px}
+.guide-step{padding:0 0 14px;position:relative}
+.guide-step:last-child{padding-bottom:0}
+.guide-step-num{position:absolute;left:-32px;top:0;width:22px;height:22px;border-radius:50%;background:var(--T);color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;z-index:1}
+.guide-step-en{font-size:13px;font-weight:500;color:var(--t1);line-height:1.5;padding-top:2px}
+
+.sc-head-text{padding:12px 16px;border-bottom:1px solid var(--border);border-left:4px solid var(--T);background:#fff}
+.sht-title{font-size:14px;font-weight:700;color:var(--t1);line-height:1.2;letter-spacing:-.2px}
+.sht-desc{font-size:11px;color:var(--t2);margin-top:3px;line-height:1.5;font-weight:400}
+
+.sc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.sc-head{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px;border-left:4px solid var(--T)}
+.sc-icon{width:32px;height:32px;border-radius:8px;background:var(--Tl);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.sc-head h2{font-size:14px;font-weight:700;color:var(--t1)}
+.sc-head p{font-size:11px;color:var(--t2);margin-top:1px}
+.sc-body{padding:12px}
+
+/* FIELDS */
+.f{margin-bottom:11px}
+.f:last-child{margin-bottom:0}
+.fl{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.rs{color:var(--P);font-size:14px;font-weight:700;line-height:1;transition:opacity .2s}
+.f.req.filled .rs{opacity:0}
+.f select,.f input[type="text"],.f input[type="number"]{width:100%;height:46px;padding:0 13px;border:1.5px solid var(--border);border-radius:9px;font-size:15px;font-weight:600;color:var(--t1);font-family:'Inter',sans-serif;background:#fff;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none;appearance:none}
+.f select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none' viewBox='0 0 20 20'%3E%3Crect width='20' height='20' rx='6' fill='%232EA8A3'/%3E%3Cpath d='M6 8l4 4 4-4' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;background-size:22px;padding-right:42px}
+.f.req select,.f.req input{border-color:var(--rB);background:var(--rBg)}
+.f.req.filled select,.f.req.filled input{border-color:var(--T);background:#fff}
+.f select:focus,.f input:focus{outline:none;border-color:var(--T);box-shadow:0 0 0 3px rgba(46,168,163,.14)}
+.f select:focus-visible,.f input:focus-visible{outline:2px solid var(--T);outline-offset:2px}
+.f.req select:focus,.f.req input:focus{border-color:var(--Pd);box-shadow:0 0 0 3px var(--rG)}
+.f.req.filled select:focus,.f.req.filled input:focus{border-color:var(--Td);box-shadow:0 0 0 3px rgba(46,168,163,.14)}
+.f.err select,.f.err input{border-color:var(--R)!important;background:#fff9f9!important}
+.ferr{font-size:11px;color:var(--R);font-weight:600;margin-top:3px;display:none}
+.ferr.show{display:block}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:11px}
+.fr .f{margin-bottom:0}
+.plan-pill{background:var(--Tll);border:1px solid var(--Tl);border-radius:9px;padding:9px 13px;font-size:12px;font-weight:600;color:var(--Td)}
+
+/* PAR SECTION */
+.par-grid{display:grid;grid-template-columns:1fr 24px 1fr;gap:6px;align-items:end;margin-bottom:10px}
+.par-arrow{display:flex;align-items:center;justify-content:center;height:46px;font-size:16px;color:var(--t3);flex-shrink:0}
+.par-pill{display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:9px;border:1.5px solid var(--border);background:var(--soft);transition:all .2s}
+.par-pill.ok{border-color:var(--T);background:var(--Tll)}
+.par-pill.no{border-color:var(--R);background:var(--Rl)}
+.par-pill-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--t3)}
+.par-pill.ok .par-pill-lbl{color:var(--Td)}
+.par-pill.no .par-pill-lbl{color:var(--R)}
+.par-pill-val{font-size:20px;font-weight:800;line-height:1;color:var(--t1)}
+.par-pill.ok .par-pill-val{color:var(--Td)}
+.par-pill.no .par-pill-val{color:var(--R)}
+.par-pill-badge{margin-left:auto;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--soft);color:var(--t3);white-space:nowrap;border:1px solid var(--border);flex-shrink:0}
+.par-pill.ok .par-pill-badge{background:var(--T);color:#fff;border-color:var(--T)}
+.par-pill.no .par-pill-badge{background:var(--R);color:#fff;border-color:var(--R)}
+.par-hint{padding:8px 11px;background:var(--Tll);border:1px solid var(--Tl);border-radius:8px;font-size:11px;color:var(--Td);line-height:1.6;font-weight:500}
+
+/* LOAN CARDS */
+.loan-list{display:flex;flex-direction:column;gap:7px}
+.lc{border:1.5px solid var(--border);border-radius:9px;overflow:hidden;background:var(--card);transition:border-color .2s}
+.lc.has{border-color:var(--T)}
+.lc-hdr{display:flex;align-items:center;gap:9px;padding:10px 11px;cursor:pointer;background:var(--card);user-select:none;-webkit-tap-highlight-color:transparent}
+.lc.has .lc-hdr{background:var(--Tll)}
+.lc-num{width:26px;height:26px;border-radius:7px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--t3);flex-shrink:0;transition:background .2s,color .2s}
+.lc.has .lc-num{background:var(--T);color:#fff}
+.lc-info{flex:1;min-width:0}
+.lc-main{font-size:13px;font-weight:700;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lc-sub{font-size:11px;color:var(--t3);margin-top:1px}
+.lc.has .lc-sub{color:var(--Td);font-weight:600}
+.lc-r{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.lc-irr{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(--Tl);color:var(--Td);white-space:nowrap}
+.lc-dot{width:7px;height:7px;border-radius:50%;background:var(--rB);flex-shrink:0}
+.lc.done .lc-dot{background:var(--T)}
+.lc.open-state .lc-dot{opacity:0}
+.lc-chev{width:19px;height:19px;border-radius:50%;background:var(--soft);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .2s,background .2s}
+.lc.open-state .lc-chev{transform:rotate(180deg);background:var(--Tl)}
+.lc-body{display:none;padding:11px;border-top:1px solid var(--border);background:#fff}
+.lc.open-state .lc-body{display:block}
+
+/* Loan output box */
+.lc-out{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:9px;background:var(--Tll);border-radius:7px;border:1px solid var(--Tl);margin-bottom:9px}
+.lco-lbl{font-size:9px;font-weight:700;color:var(--Td);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+.lco-val{font-size:16px;font-weight:800;color:var(--Td);line-height:1}
+.lco-val.empty{color:var(--t3);font-size:12px;font-weight:400}
+.lco-note{font-size:9px;color:var(--Td);opacity:.6;margin-top:2px;font-weight:600}
+
+/* Loan inputs */
+.li-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:9px}
+.li-f{display:flex;flex-direction:column;gap:3px}
+.li-lbl{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;display:flex;align-items:center;gap:3px}
+.li-inp{width:100%;height:40px;padding:0 10px;border:1.5px solid var(--rB);border-radius:7px;font-size:15px;font-weight:600;color:var(--t1);font-family:'Inter',sans-serif;background:var(--rBg);-webkit-appearance:none;appearance:none;transition:border-color .15s,box-shadow .15s;text-align:right}
+.li-inp:focus{outline:none;border-color:var(--Pd);box-shadow:0 0 0 3px var(--rG);background:#fff}
+.li-inp:focus-visible{outline:2px solid var(--Pd);outline-offset:2px}
+.li-inp.ok{border-color:var(--T);background:#fff}
+.li-inp.ok:focus{border-color:var(--Td);box-shadow:0 0 0 3px rgba(46,168,163,.14)}
+.li-inp.bad{border-color:var(--R)!important;background:#fff9f9!important}
+.li-ferr{font-size:10px;color:var(--R);font-weight:600;display:none}
+.li-ferr.show{display:block}
+.li-star{color:var(--P);font-size:12px;font-weight:800;transition:opacity .2s}
+.li-f.done .li-star{opacity:0}
+.tip{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:var(--t3);color:#fff;font-size:8px;font-weight:800;cursor:pointer;flex-shrink:0}
+.btn-rm{width:100%;height:34px;border:1.5px dashed #fecaca;border-radius:7px;background:#fff;color:var(--R);font-size:11px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:5px}
+.btn-rm:active{background:var(--Rl)}
+.btn-add{display:flex;align-items:center;justify-content:center;gap:5px;width:100%;height:42px;border:1.5px dashed var(--T);border-radius:9px;background:var(--Tll);color:var(--Td);font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s}
+.btn-add:active{background:var(--Tl)}
+.loan-cnt{font-size:10px;color:var(--t3);font-weight:600;text-align:right;margin-top:5px}
+.totals{display:grid;grid-template-columns:1fr 1fr;padding:10px 12px;background:var(--soft);border-top:1px solid var(--border)}
+.tot-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--t3);margin-bottom:2px}
+.tot-val{font-size:15px;font-weight:800;color:var(--Td)}
+
+/* ══ RESULTS SECTION ══ */
+/* Gate */
+.gate{border:1.5px solid var(--border);border-radius:9px;overflow:hidden;margin-bottom:11px}
+.gate.pass{border-color:var(--G)}
+.gate.fail{border-color:var(--R)}
+.gate-top{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:var(--Tll)}
+.gate.pass .gate-top{background:var(--Gl)}
+.gate.fail .gate-top{background:var(--Rl)}
+.gate-top-l{display:flex;align-items:center;gap:7px}
+.gate-tag{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;padding:2px 7px;border-radius:20px;background:var(--T);color:#fff}
+.gate.pass .gate-tag{background:var(--G)}
+.gate.fail .gate-tag{background:var(--R)}
+.gate-title{font-size:12px;font-weight:700;color:var(--t1)}
+.gate-body{padding:11px 12px}
+.gate-pct-row{display:flex;align-items:baseline;gap:6px;margin-bottom:4px}
+.gate-pct{font-size:30px;font-weight:900;line-height:1;color:var(--t1)}
+.gate.pass .gate-pct{color:var(--G)}
+.gate.fail .gate-pct{color:var(--R)}
+.gate-detail{font-size:11px;color:var(--t2)}
+.gate-bar-track{height:7px;border-radius:7px;background:var(--soft);overflow:hidden;margin-bottom:8px}
+.gate-bar{height:100%;border-radius:7px;background:var(--R);transition:width .4s,background .3s}
+.gate.pass .gate-bar{background:var(--G)}
+.gate-msg{padding:6px 10px;border-radius:20px;font-size:11px;font-weight:600;text-align:center;background:var(--soft);color:var(--t3)}
+.gate.pass .gate-msg{background:var(--Gl);color:var(--G)}
+.gate.fail .gate-msg{background:var(--Rl);color:var(--R)}
+.gate-lock{display:none;align-items:center;justify-content:center;gap:6px;padding:8px;background:var(--Rl);border:1px dashed #fecaca;border-radius:7px;font-size:11px;font-weight:700;color:var(--R);margin-top:7px}
+
+/* INCENTIVE GRID VISUAL */
+.igrid-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--t3);margin-bottom:7px}
+.igrid{display:flex;align-items:stretch;gap:4px;margin-bottom:12px}
+.ig{flex:1;border-radius:8px;padding:8px 5px;text-align:center;border:1.5px solid var(--border);background:var(--soft);transition:all .2s}
+.ig.on{border-color:var(--T);background:var(--Tll)}
+.ig.off{opacity:.5}
+.ig.total{border-color:var(--N);background:var(--N)}
+.ig-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:var(--t3);margin-bottom:3px}
+.ig.on .ig-lbl{color:var(--Td)}
+.ig.total .ig-lbl{color:rgba(255,255,255,.55)}
+.ig-val{font-size:18px;font-weight:900;color:var(--t3);line-height:1}
+.ig.on .ig-val{color:var(--Td)}
+.ig.total .ig-val{color:#fff}
+.ig-sub{font-size:10px;color:var(--t3);margin-top:2px}
+.ig.on .ig-sub{color:var(--Td);opacity:.7}
+.ig.total .ig-sub{color:rgba(255,255,255,.45)}
+.ig-op{display:flex;align-items:center;font-size:15px;font-weight:800;color:var(--t3);flex-shrink:0}
+
+/* SCORECARD */
+.scorecard{border:1.5px solid var(--border);border-radius:10px;overflow:hidden;background:var(--card)}
+.sc-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 14px 4px}
+.scr-left{display:flex;align-items:center;gap:11px;flex:1;min-width:0}
+.scr-icon{font-size:22px;flex-shrink:0;width:28px;text-align:center}
+.scr-info{min-width:0}
+.scr-title{font-size:13px;font-weight:700;color:var(--t1)}
+.scr-detail{font-size:11px;color:var(--t2);margin-top:2px;font-weight:500;line-height:1.4}
+.scr-detail.ok{color:var(--G);font-weight:600}
+.scr-detail.warn{color:var(--A);font-weight:600}
+.scr-detail.no{color:var(--R);font-weight:600}
+.scr-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.scr-earned{font-size:22px;font-weight:900;color:var(--t3);line-height:1;letter-spacing:-.5px}
+.scr-earned.ok{color:var(--G)}
+.scr-earned.warn{color:var(--A)}
+.scr-earned.base{color:var(--T)}
+.scr-earned.locked{color:var(--t3)}
+.scr-tag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;padding:2px 7px;border-radius:20px;background:var(--soft);color:var(--t3);border:1px solid var(--border)}
+.scr-tag.pass{background:var(--Gl);color:var(--G);border-color:#bbf7d0}
+.scr-tag.fail{background:var(--Rl);color:var(--R);border-color:#fecaca}
+.scr-tag.earn{background:var(--Tll);color:var(--Td);border-color:var(--Tl)}
+.scr-tag.part{background:var(--Al);color:var(--A);border-color:#fed7aa}
+.scr-bar-track{height:6px;border-radius:6px;background:var(--soft);overflow:hidden;margin-bottom:6px}
+.scr-bar{height:100%;border-radius:6px;background:var(--R);transition:width .4s,background .3s}
+.scr-bar.ok{background:var(--G)}
+.scr-gate-lock{display:none;font-size:11px;font-weight:700;color:var(--R);background:var(--Rl);border:1px dashed #fecaca;border-radius:7px;padding:6px 10px;text-align:center}
+.scr-gate-lock.show{display:block}
+.scr-divider{height:1px;background:var(--border);margin:6px 14px 0}
+.scr-total-row{display:flex;align-items:center;justify-content:space-between;padding:14px;background:var(--N);margin-top:0}
+.scr-total-label{font-size:13px;font-weight:700;color:rgba(255,255,255,.7)}
+.scr-total-val{font-size:28px;font-weight:900;color:#fff;letter-spacing:-1px}
+
+.addon:last-child{margin-bottom:0}
+.addon.earn{border-color:var(--T)}
+.addon.part{border-color:var(--A)}
+.addon.miss{border-color:var(--border)}
+.addon-top{padding:8px 11px;background:var(--soft);display:flex;align-items:center;justify-content:space-between}
+.addon.earn .addon-top{background:var(--Tll)}
+.addon.part .addon-top{background:var(--Al)}
+.addon-top-l{}
+.addon-tag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t3);margin-bottom:1px}
+.addon.earn .addon-tag{color:var(--Td)}
+.addon.part .addon-tag{color:var(--A)}
+.addon-name{font-size:13px;font-weight:700;color:var(--t1)}
+.addon-earn-val{font-size:13px;font-weight:800;padding:3px 10px;border-radius:20px;background:var(--soft);color:var(--t3)}
+.addon.earn .addon-earn-val{background:var(--T);color:#fff}
+.addon.part .addon-earn-val{background:var(--A);color:#fff}
+.addon-body{padding:10px 11px}
+.addon-2col{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.addon-left-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--t2);margin-bottom:3px}
+.addon-big{font-size:22px;font-weight:800;color:var(--t1);line-height:1}
+.addon-tgt{font-size:10px;color:var(--t3);margin-top:2px}
+.addon-bar-t{height:5px;border-radius:5px;background:var(--soft);overflow:hidden;margin-top:5px}
+.addon-bar{height:100%;border-radius:5px;background:var(--R);transition:width .3s,background .3s}
+.addon-bar.ok{background:var(--G)}
+.addon-bar.mid{background:var(--A)}
+.addon-pct-note{font-size:11px;font-weight:700;color:var(--t3);margin-top:4px}
+.addon-pct-note.ok{color:var(--G)}
+.addon-pct-note.mid{color:var(--A)}
+.addon-tiers{display:flex;flex-direction:column;gap:4px;justify-content:flex-end}
+.tier{display:flex;align-items:center;gap:5px;padding:4px 8px;border-radius:6px;background:var(--soft)}
+.tier.on{background:var(--Tll)}
+.tier.on-mid{background:var(--Al)}
+.tier-dot{width:14px;height:14px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:8px;color:#fff;flex-shrink:0}
+.tier.on .tier-dot{background:var(--T)}
+.tier.on-mid .tier-dot{background:var(--A)}
+.tier-lbl{font-size:10px;font-weight:600;color:var(--t3);flex:1}
+.tier.on .tier-lbl,.tier.on-mid .tier-lbl{color:var(--t1);font-weight:700}
+.tier-val{font-size:11px;font-weight:800;color:var(--t3)}
+.tier.on .tier-val{color:var(--Td)}
+.tier.on-mid .tier-val{color:var(--A)}
+.addon-status{margin-top:7px;padding:5px 10px;border-radius:20px;font-size:11px;font-weight:600;text-align:center;background:var(--soft);color:var(--t3)}
+.addon.earn .addon-status{background:var(--Gl);color:var(--G)}
+.addon.part .addon-status{background:var(--Al);color:var(--A)}
+.addon.miss .addon-status{background:var(--Rl);color:var(--R)}
+
+/* SIMPLIFIED SUMMARY */
+.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:9px;overflow:hidden;margin-bottom:10px}
+.sum-item{background:#fff;padding:10px 12px}
+.sum-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--t3);margin-bottom:3px}
+.sum-val{font-size:14px;font-weight:700;color:var(--t1)}
+.sum-val.hi{color:var(--Td)}
+.sum-grid-strip{display:flex;align-items:center;gap:4px;background:var(--N);border-radius:9px;padding:10px 12px;margin-bottom:10px;flex-wrap:wrap}
+.sgs-item{display:flex;flex-direction:column;align-items:center;flex:1}
+.sgs-lbl{font-size:9px;font-weight:600;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px}
+.sgs-val{font-size:15px;font-weight:800;color:rgba(255,255,255,.7)}
+.sgs-item.sgs-total .sgs-val{color:#fff;font-size:18px}
+.sgs-item.sgs-total .sgs-lbl{color:rgba(255,255,255,.6)}
+.sgs-sep{font-size:14px;font-weight:800;color:rgba(255,255,255,.3);flex-shrink:0}
+.sum-incentive-row{display:flex;align-items:center;justify-content:space-between;padding:13px 14px;background:var(--Tll);border:1.5px solid var(--T);border-radius:9px;margin-bottom:10px}
+.sir-label{font-size:14px;font-weight:700;color:var(--Td)}
+.sir-val{font-size:22px;font-weight:900;color:var(--Td);letter-spacing:-.5px}
+
+.loan-summary-box{margin:0 12px 12px;border:1px solid var(--border);border-radius:9px;overflow:hidden;background:var(--soft)}
+.loan-summary-metrics{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;padding:10px 14px;gap:0}
+.loan-summary-item{display:flex;flex-direction:column;gap:3px}
+.loan-summary-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t3)}
+.loan-summary-val{font-size:18px;font-weight:800;color:var(--Td);line-height:1;letter-spacing:-.3px}
+.loan-summary-divider{width:1px;height:28px;background:var(--border);margin:0 12px}
+
+.par-strip-no{background:var(--Rl)!important}
+/* CONDITION BLOCKS */
+.cond-block{padding:0}
+.cond-label-row{display:flex;align-items:center;gap:11px;padding:10px 14px;background:var(--soft);border-bottom:1px solid var(--border)}
+.cond-tag{font-size:17px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:8px;flex-shrink:0;background:var(--Tll);border:1px solid var(--Tl)}
+.cond-tag-1{background:var(--Tll);border:1px solid var(--Tl)}
+.cond-tag-2{background:var(--Tll);border:1px solid var(--Tl)}
+.cond-label-wrap{flex:1;min-width:0}
+.cond-label-title{font-size:13px;font-weight:700;color:var(--t1)}
+.cond-label-sub{font-size:11px;color:var(--t2);margin-top:2px;font-weight:400;line-height:1.4}
+.cond-badge{font-size:10px;font-weight:800;padding:3px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+.cond-badge-gate{background:var(--N);color:#fff}
+.cond-badge-par{background:var(--T);color:#fff}
+
+.scr-guide-btn{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--t3);color:#fff;font-size:9px;font-weight:800;border:none;cursor:pointer;font-family:'Inter',sans-serif;margin-left:6px;vertical-align:middle;flex-shrink:0;transition:background .15s}
+.scr-guide-btn:hover,.scr-guide-btn.open{background:var(--T)}
+.scr-guide-panel{display:none;margin:0 12px 10px;border-radius:8px;overflow:hidden;border:1px solid var(--Tl)}
+.scr-guide-panel.open{display:block;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.sgp-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--Td);padding:7px 11px;background:var(--Tll);border-bottom:1px solid var(--Tl)}
+.sgp-formula{font-size:11px;font-weight:600;color:var(--Td);padding:6px 11px;background:rgba(46,168,163,.06);border-bottom:1px solid var(--Tl);font-style:italic}
+.sgp-rows{display:flex;flex-direction:column;gap:0;background:#fff}
+.sgp-row{display:grid;grid-template-columns:1fr 18px 1fr;gap:6px;align-items:start;padding:8px 11px;border-bottom:1px solid var(--border)}
+.sgp-row:last-child{border-bottom:none}
+.sgp-row.sgp-pass{background:#f8fffe}
+.sgp-row.sgp-warn{background:#fffdf5}
+.sgp-row.sgp-fail{background:#fff9f9}
+.sgp-cond{font-size:11px;font-weight:600;color:var(--t1);line-height:1.4}
+.sgp-arrow{font-size:12px;color:var(--t3);text-align:center;padding-top:2px}
+.sgp-result{font-size:11px;font-weight:600;color:var(--t1);line-height:1.5}
+.sgp-row.sgp-pass .sgp-result strong{color:var(--G)}
+.sgp-row.sgp-warn .sgp-result strong{color:var(--A)}
+.sgp-row.sgp-fail .sgp-result strong{color:var(--R)}
+.sgp-note{font-size:10px;font-weight:400;color:var(--t3);display:block;margin-top:1px}
+
+.formula-bar{padding:11px 14px;background:var(--N);border-radius:9px;margin-top:11px}
+.formula-bar-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:rgba(255,255,255,.45);margin-bottom:7px}
+.formula-bar-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.fb-part{font-size:12px;font-weight:700;color:rgba(255,255,255,.65);padding:4px 8px;background:rgba(255,255,255,.09);border-radius:6px}
+.fb-op{font-size:13px;font-weight:800;color:rgba(255,255,255,.35)}
+.fb-result{font-size:19px;font-weight:900;color:#fff;padding:5px 12px;background:var(--T);border-radius:7px}
+
+/* WHAT-IF */
+.wi-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.wi-head{padding:10px 14px;background:linear-gradient(135deg,var(--N),var(--N2));display:flex;align-items:center;gap:10px;border-left:4px solid #F59E0B}
+.wi-title{font-size:13px;font-weight:700;color:#fff}
+.wi-sub{font-size:10px;color:rgba(255,255,255,.45);margin-top:1px}
+.wi-body{padding:10px 12px;display:flex;flex-direction:column;gap:5px}
+.wi-empty{padding:10px;background:var(--soft);border-radius:8px;font-size:12px;font-weight:600;color:var(--t3);text-align:center}
+.wi-note{font-size:10px;color:var(--t3);text-align:center;padding:3px 0;font-weight:500}
+.wi-row{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;background:var(--soft);border:1.5px solid transparent;transition:all .2s}
+.wi-row.cur{border-color:var(--T);background:var(--Tll)}
+.wi-row.cur-miss{border-color:var(--R);background:var(--Rl)}
+.wi-icon{font-size:16px}
+.wi-scenario{font-size:11px;font-weight:700;color:var(--t2)}
+.wi-row.cur .wi-scenario{color:var(--Td)}
+.wi-row.cur-miss .wi-scenario{color:var(--R)}
+.wi-g{font-size:12px;font-weight:700;color:var(--t3);text-align:center}
+.wi-row.cur .wi-g{color:var(--Td)}
+.wi-row.cur-miss .wi-g{color:var(--R)}
+.wi-amt{font-size:14px;font-weight:800;color:var(--t3)}
+.wi-row.cur .wi-amt{color:var(--Td)}
+.wi-row.cur-miss .wi-amt{color:var(--R)}
+.wi-cur-tag{grid-column:1/-1;font-size:9px;font-weight:700;color:var(--Td);text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
+.wi-row.cur-miss .wi-cur-tag{color:var(--R)}
+.wi-gate-notice{padding:8px 10px;background:var(--Rl);border:1px dashed #fecaca;border-radius:8px;font-size:11px;font-weight:700;color:var(--R);text-align:center}
+
+/* BREAKDOWN */
+.brk{display:flex;flex-direction:column}
+.brk-row{display:flex;justify-content:space-between;align-items:center;padding:9px 4px;border-bottom:1px solid var(--border)}
+.brk-row:last-child{border-bottom:none}
+.brk-l{font-size:13px;color:var(--t2)}
+.brk-v{font-size:13px;font-weight:700;color:var(--t1)}
+.brk-v.hi{color:var(--Td)}
+.brk-row.tot{padding:11px 8px;margin-top:5px;background:var(--soft);border-radius:8px;border:1px solid var(--border)}
+.brk-row.tot .brk-l{font-size:14px;font-weight:700;color:var(--Td)}
+.brk-row.tot .brk-v{font-size:20px;font-weight:900;color:var(--Td)}
+.divider{border:none;border-top:1px dashed var(--border);margin:3px 0}
+.id-card{background:var(--Tll);border:1px solid var(--Tl);border-radius:9px;padding:11px 14px;display:flex;align-items:center;gap:12px;margin-top:12px}
+.id-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--Td),#3ec9c3);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.id-name{font-size:14px;font-weight:800;color:var(--Td)}
+.id-detail{font-size:11px;color:var(--t2);font-weight:600;margin-top:1px}
+.id-month{font-size:10px;color:var(--t3);margin-top:1px}
+
+/* STATUS BADGES */
+.s-ok{font-size:11px;font-weight:700;padding:6px 13px;background:var(--Gl);color:var(--G);border-radius:20px;display:inline-block;border:1px solid #bbf7d0}
+.s-no{font-size:11px;font-weight:700;padding:6px 13px;background:var(--Rl);color:var(--R);border-radius:20px;display:inline-block;border:1px solid #fecaca}
+.s-mid{font-size:11px;font-weight:700;padding:6px 13px;background:var(--Al);color:var(--A);border-radius:20px;display:inline-block;border:1px solid #fed7aa}
+.s-wait{font-size:11px;font-weight:600;color:var(--t3);display:inline-block;line-height:1.4;text-align:right}
+
+/* CELEBRATION */
+.celebr{display:none;background:linear-gradient(135deg,var(--Td),#3ec9c3);border-radius:var(--r);padding:15px 18px;text-align:center;margin-bottom:11px;position:relative;overflow:hidden}
+.celebr.show{display:block;animation:cin .35s ease}
+@keyframes cin{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.celebr::before{content:'🎉';position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:28px;opacity:.3}
+.celebr::after{content:'🎉';position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:28px;opacity:.3}
+.celebr-t{font-size:15px;font-weight:800;color:#fff}
+.celebr-s{font-size:11px;color:rgba(255,255,255,.8);margin-top:2px}
+.celebr-a{font-size:26px;font-weight:900;color:#fff;letter-spacing:-1px;margin-top:3px}
+
+
+.comp-strip{background:#fff;border-bottom:1px solid var(--border);padding:7px 16px;display:flex;align-items:center;justify-content:space-between;gap:6px;pointer-events:all}
+.comp-item{display:flex;align-items:center;gap:5px;flex:1;justify-content:center}
+.comp-dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--t3);flex-shrink:0;transition:all .2s;font-weight:800}
+.comp-dot.done{background:var(--T);border-color:var(--T);color:#fff}
+.comp-dot.partial{background:var(--Al);border-color:var(--A);color:var(--A)}
+.comp-lbl{font-size:10px;font-weight:600;color:var(--t3);transition:color .2s;white-space:nowrap}
+.comp-dot.done + .comp-lbl{color:var(--Td)}
+.comp-dot.partial + .comp-lbl{color:var(--A)}
+.comp-sep{width:20px;height:1.5px;background:var(--border);flex-shrink:0;transition:background .2s}
+.comp-sep.done{background:var(--T)}
+
+/* FLOATING RESET */
+.btn-float-reset{position:fixed;bottom:20px;right:16px;z-index:90;width:44px;height:44px;border-radius:50%;background:var(--N);border:none;color:#fff;font-size:18px;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;transition:background .15s;font-family:'Inter',sans-serif}
+.btn-float-reset:active{background:var(--R)}
+@media print{.btn-float-reset{display:none!important}}
+
+.btn-reset{width:100%;height:46px;border:1.5px solid var(--T);border-radius:11px;background:#fff;color:var(--T);font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .15s}
+.btn-reset:active{background:var(--T);color:#fff}
+
+/* TOOLTIP */
+#tip{position:fixed;background:var(--N);color:#fff;font-size:11px;font-weight:500;padding:7px 10px;border-radius:7px;width:190px;line-height:1.5;z-index:9999;box-shadow:0 4px 14px rgba(0,0,0,.25);pointer-events:none;display:none;font-family:'Inter',sans-serif}
+
+/* EXTRACTED FROM INLINE STYLES */
+.par-ratio-note{font-size:9px;color:var(--t3);font-weight:600;margin-top:1px}
+.par-status-col{border-left:1px solid var(--border);padding-left:12px}
+.par-badge-val{font-size:13px;font-weight:700}
+.section-divider-row{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--soft)}
+.section-divider-line{flex:1;height:1px;background:var(--border)}
+.section-divider-label{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;white-space:nowrap}
+.gate-bar-wrap{padding:0 12px 12px}
+.formula-bar{padding:11px 14px;background:var(--N);border-radius:9px;margin-top:10px}
+
+/* SKIP-TO-CONTENT (accessibility) */
+.skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:200;background:var(--T);color:#fff;font-size:14px;font-weight:700;padding:10px 16px;border-radius:0 0 8px 0}
+.skip-link:focus{position:fixed;left:0;top:0;width:auto;height:auto}
+
+@media print{
+  .hdr,.hero-wrap,.criteria-card,.btn-reset,.btn-add,.btn-rm,.tip,#tip,.btn-print,.lc-body{display:none!important}
+  .page{padding:0!important;max-width:100%!important}
+  .sc,.wi-card{break-inside:avoid;box-shadow:none!important;border:1px solid #ccc!important}
+  body{background:#fff!important}
+  .print-hdr{display:flex!important}
+}
+.print-hdr{display:none;align-items:center;gap:12px;padding:12px 0 10px;border-bottom:2px solid var(--T);margin-bottom:11px}
+.ph-mark{width:36px;height:36px;background:var(--N);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff}
+.ph-title{font-size:15px;font-weight:800;color:var(--N)}
+.ph-sub{font-size:11px;color:var(--t3);margin-top:1px}
+
+/* MOBILE */
+@media(max-width:420px){
+  .li-grid{grid-template-columns:1fr!important}
+  .li-inp{text-align:left;height:46px}
+  .li-lbl{font-size:11px}
+  .lc-out{grid-template-columns:1fr 1fr}
+  .addon-2col{grid-template-columns:1fr!important}
+  .igrid{gap:2px}
+  .ig-val{font-size:14px}
+  .ig-lbl{font-size:10px}
+  .hero-amt{font-size:28px}
+  .fr{grid-template-columns:1fr!important}
+  .sum-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<!-- ─ HEADER ─ -->
+<header class="hdr">
+  <div class="hdr-l">
+    <div class="hdr-badge">DO</div>
+    <div>
+      <div class="hdr-title">Disbursement Officer — Incentive Simulator</div>
+      <div class="hdr-sub">ChokChey Finance · v3</div>
+    </div>
+  </div>
+  <div class="hdr-r">
+    <button class="btn-print" onclick="window.print()">🖨 Export</button>
+  </div>
+</header>
+
+<!-- ─ HERO removed, incentive shown in header ─ -->
+<!-- hidden for JS compatibility -->
+<div style="display:none"><span id="hdrMonth"></span></div>
+
+<!-- ─ HERO ─ -->
+<div class="hero-wrap" id="heroWrap">
+  <div class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-lbl">💰 Estimated Incentive</div>
+        <div class="hero-amt" id="heroAmt" aria-live="polite" aria-label="Estimated incentive amount">$0.00</div>
+        <div class="hero-note">Updates live as you fill in loan data below</div>
+      </div>
+      <div id="heroStatus"><span class="s-wait">— Select your position —</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Floating reset -->
+<button class="btn-float-reset" onclick="resetAll()" title="Reset all fields" aria-label="Reset all fields">↺</button>
+
+<div class="page" id="main-content">
+
+  <!-- Print header -->
+  <div class="print-hdr">
+    <div class="ph-mark">DO</div>
+    <div>
+      <div class="ph-title">Disbursement Officer — Incentive Simulator</div>
+      <div class="ph-sub">ChokChey Finance Plc &nbsp;·&nbsp; <span id="phMonth"></span> &nbsp;·&nbsp; <span id="phName"></span></div>
+    </div>
+  </div>
+
+  <!-- ══ HOW TO USE ══ -->
+  <div class="guide-card">
+    <button class="guide-toggle" onclick="toggleCrit(this)" aria-expanded="false" aria-controls="guideBody">
+      <div style="display:flex;align-items:center;gap:9px">
+        <span style="font-size:16px">📖</span>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#fff">How to Use This Simulator</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.45);margin-top:1px">Tap to expand</div>
+        </div>
+      </div>
+      <span class="crit-arrow"><svg width="10" height="7" viewBox="0 0 10 7" fill="none"><path d="M1 1l4 4 4-4" stroke="rgba(255,255,255,.7)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </button>
+    <div class="criteria-body" id="guideBody" style="background:#f8fdfd;padding:14px" role="region" aria-label="How to Use">
+      <div class="guide-steps">
+        <div class="guide-step"><span class="guide-step-num">1</span><div class="guide-step-en">Select your <strong>Position</strong> — disbursement and IRR targets auto-fill. Choose your <strong>Month</strong>.</div></div>
+        <div class="guide-step"><span class="guide-step-num">2</span><div class="guide-step-en">Enter each <strong>Disbursed Loan</strong>: Amount, Term, Admin Fee %, Interest Rate %, Maintenance Fee %. IRR and Admin Fee are auto-calculated per loan.</div></div>
+        <div class="guide-step"><span class="guide-step-num">3</span><div class="guide-step-en">Enter <strong>New PAR&gt;1 Amount</strong> and <strong>Total Loan Outstanding</strong> — the PAR&gt;1 Ratio auto-calculates.</div></div>
+        <div class="guide-step"><span class="guide-step-num">4</span><div class="guide-step-en">Check <strong>Incentive Results</strong> — gate status, grid % earned, and estimated incentive update live.</div></div>
+        <div style="margin-top:6px;padding:8px 10px;background:var(--Tll);border-radius:8px;font-size:12px;color:var(--Td);font-weight:500">💡 <strong>Tip:</strong> Tap the <strong>ℹ</strong> icon on each result row to see the grid calculation detail.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STEP 1: SETUP ══ -->
+  <div class="sc">
+    <div class="sc-head-text">
+      <div class="sht-title">Select your position and month to get started.</div>
+    </div>
+    <div class="sc-body">
+      <div class="fr">
+        <div class="f req" id="fPos">
+          <div class="fl">Position <span class="rs">*</span></div>
+          <select id="sPos" onchange="mF('fPos','sPos');onPos()">
+>
+            <option value="">— Select —</option>
+            <option value="SCO">SCO — Senior Credit Officer</option>
+            <option value="CO">CO — Credit Officer</option>
+            <option value="JCO">JCO — Junior Credit Officer</option>
+          </select>
+        </div>
+        <div class="f req" id="fMonth">
+          <div class="fl">Month <span class="rs">*</span></div>
+          <select id="sMonth" onchange="mF('fMonth','sMonth');onMonth()">
+            <option value="">— Select Month —</option>
+            <!-- Options populated dynamically by JS -->
+          </select>
+        </div>
+      </div>
+      <input type="hidden" id="sTarget"><input type="hidden" id="sIrrTarget">
+      <div class="fr">
+        <div class="f"><div class="fl">👤 Name <span style="font-size:10px;font-weight:400;color:var(--t3);text-transform:none">(optional)</span></div><input type="text" id="sName" placeholder="Your name…" oninput="updTag()"></div>
+        <div class="f"><div class="fl">🏢 Branch <span style="font-size:10px;font-weight:400;color:var(--t3);text-transform:none">(optional)</span></div><input type="text" id="sBranch" placeholder="e.g. Bati" oninput="updTag()"></div>
+      </div>
+      <div class="plan-pill" id="planPill">📊 Select a position to see your monthly targets</div>
+    </div>
+  </div>
+
+  <!-- ══ INCENTIVE ELIGIBILITY CONDITIONS ══ -->
+  <div class="sc">
+
+    <!-- Card header -->
+    <div class="sc-head-text">
+      <div class="sht-title">Enter your disbursed loans and PAR&gt;1 data to calculate your incentive.</div>
+    </div>
+
+    <!-- Condition 1 -->
+    <div class="cond-block">
+      <div class="cond-label-row">
+        <div class="cond-tag cond-tag-1">💸</div>
+        <div class="cond-label-wrap">
+          <div class="cond-label-title">Disbursement Amount</div>
+          <div class="cond-label-sub">Achieve 100% to earn the base grid. Below 100% = no incentive.</div>
+        </div>
+        <div class="cond-badge cond-badge-gate">GATE</div>
+      </div>
+      <div class="sc-body" style="padding-bottom:6px">
+        <div class="loan-list" id="loanList"></div>
+        <div style="margin-top:8px">
+          <button class="btn-add" id="btnAdd" onclick="addLoan()">＋ Add Loan</button>
+          <div class="loan-cnt" id="lCount">2 / 20 loans</div>
+        </div>
+      </div>
+      <!-- Loan Summary -->
+      <div class="loan-summary-box">
+        <div class="loan-summary-metrics">
+          <div class="loan-summary-item">
+            <div class="loan-summary-lbl">Total Disbursed</div>
+            <div class="loan-summary-val" id="totDisb">$0</div>
+          </div>
+          <div class="loan-summary-divider"></div>
+          <div class="loan-summary-item">
+            <div class="loan-summary-lbl">Total IRR</div>
+            <div class="loan-summary-val" id="totIRR">—</div>
+          </div>
+          <div class="loan-summary-divider"></div>
+          <div class="loan-summary-item">
+            <div class="loan-summary-lbl">Admin Fee</div>
+            <div class="loan-summary-val" id="totFee">$0.00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div style="height:1px;background:var(--border);margin:0"></div>
+    <div class="section-divider-row">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-label">Portfolio Quality</span>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <!-- Condition 2 -->
+    <div class="cond-block">
+      <div class="cond-label-row">
+        <div class="cond-tag cond-tag-2">🛡️</div>
+        <div class="cond-label-wrap">
+          <div class="cond-label-title">New PAR&gt;1 Increment</div>
+          <div class="cond-label-sub">If PAR&gt;1 Ratio ≤ 0.20% — earns +10% on top of your base grid</div>
+        </div>
+        <div class="cond-badge cond-badge-par">+10%</div>
+      </div>
+      <div class="sc-body">
+        <div class="fr">
+          <div class="f req" id="fPARamt">
+            <div class="fl">New PAR&gt;1 Amount ($) <span class="rs">*</span> <span class="tip" data-tip="Non-overdue clients at month-start who became overdue by month-end. Enter their total outstanding balance.">?</span></div>
+            <input type="text" inputmode="numeric" id="sPARamt" placeholder="e.g. 1,200"
+              oninput="this.value=this.value.replace(/[^0-9.]/g,'');onPAR();mF('fPARamt','sPARamt')" onblur="blurPARamt()">
+            <div class="ferr" id="ePARamt">⚠ Must be 0 or more</div>
+          </div>
+          <div class="f req" id="fPARlo">
+            <div class="fl">Total Loan Outstanding ($) <span class="rs">*</span> <span class="tip" data-tip="Total portfolio outstanding balance at end of month.">?</span></div>
+            <input type="text" inputmode="numeric" id="sPARlo" placeholder="e.g. 600,000"
+              oninput="this.value=this.value.replace(/[^0-9.]/g,'');onPAR();mF('fPARlo','sPARlo')" onblur="blurPARlo()">
+            <div class="ferr" id="ePARlo">⚠ Must be greater than 0</div>
+          </div>
+        </div>
+      </div>
+      <!-- PAR result strip — mirrors loans totals strip -->
+      <div class="totals" id="parPill">
+        <div>
+          <div class="tot-lbl">PAR&gt;1 Ratio</div>
+          <div class="tot-val" id="parPillVal">—</div>
+          <div class="par-ratio-note">New PAR ÷ Total L/O</div>
+        </div>
+        <div class="par-status-col">
+          <div class="tot-lbl">Status</div>
+          <div class="tot-val par-badge-val" id="parPillBadge">Enter values above</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ STEP 4: RESULTS ══ -->
+  <div class="sc">
+    <div class="sc-head-text">
+      <div class="sht-title">Incentive Calculation Results</div>
+      <div class="sht-desc">See what you've earned — your incentive grid % and estimated payout based on your performance data.</div>
+    </div>
+    <div class="sc-body">
+
+      <!-- SCORECARD -->
+      <div class="scorecard" id="scorecard">
+
+        <!-- Row 1: Gate -->
+        <div class="sc-row" id="scr-gate">
+          <div class="scr-left">
+            <div class="scr-icon" id="scr-gate-ico">⬜</div>
+            <div class="scr-info">
+              <div class="scr-title">Disbursement Target
+                <button class="scr-guide-btn" onclick="toggleGuide('guide-gate')" title="Click to see grid details">ℹ</button>
+              </div>
+              <div class="scr-detail" id="scr-gate-detail">— Enter loans to calculate —</div>
+            </div>
+          </div>
+          <div class="scr-right">
+            <div class="scr-earned" id="scr-gate-earned">—</div>
+            <div class="scr-tag" id="scr-gate-tag">GATE</div>
+          </div>
+        </div>
+
+        <!-- Gate guide -->
+        <div class="scr-guide-panel" id="guide-gate">
+          <div class="sgp-title">💡 Grid Calculation Detail</div>
+          <div class="sgp-rows">
+            <div class="sgp-row sgp-pass">
+              <div class="sgp-cond">Disbursed ≥ 100% of target</div>
+              <div class="sgp-arrow">→</div>
+              <div class="sgp-result">Base grid <strong>+10%</strong> unlocked<br><span class="sgp-note">All add-ons also become eligible</span></div>
+            </div>
+            <div class="sgp-row sgp-fail">
+              <div class="sgp-cond">Disbursed &lt; 100% of target</div>
+              <div class="sgp-arrow">→</div>
+              <div class="sgp-result"><strong>$0 incentive</strong> — No grid applies<br><span class="sgp-note">Gate must pass first</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gate progress bar -->
+        <div class="gate-bar-wrap">
+          <div class="scr-bar-track"><div class="scr-bar" id="scrGateBar" style="width:0%"></div></div>
+          <div class="scr-gate-lock" id="scrGateLock">🔒 No incentive until 100% disbursement is reached</div>
+        </div>
+
+        <div class="scr-divider"></div>
+
+        <!-- Row 2: IRR -->
+        <div class="sc-row" id="scr-irr">
+          <div class="scr-left">
+            <div class="scr-icon" id="scr-irr-ico">⬜</div>
+            <div class="scr-info">
+              <div class="scr-title">IRR Performance
+                <button class="scr-guide-btn" onclick="toggleGuide('guide-irr')" title="Click to see grid details">ℹ</button>
+              </div>
+              <div class="scr-detail" id="scr-irr-detail">— Enter loans to calculate —</div>
+            </div>
+          </div>
+          <div class="scr-right">
+            <div class="scr-earned" id="scr-irr-earned">+0%</div>
+            <div class="scr-tag" id="scr-irr-tag">ADD-ON 1</div>
+          </div>
+        </div>
+
+        <!-- IRR guide -->
+        <div class="scr-guide-panel" id="guide-irr">
+          <div class="sgp-title">💡 Grid Calculation Detail</div>
+          <div class="sgp-formula">IRR = (Admin Fee% ÷ Term + Interest% + Maintenance Fee%) × 12</div>
+          <div class="sgp-rows">
+            <div class="sgp-row sgp-pass">
+              <div class="sgp-cond">Achieved IRR ≥ 100% of IRR target</div>
+              <div class="sgp-arrow">→</div>
+              <div class="sgp-result"><strong>+40%</strong> add-on<br><span class="sgp-note">e.g. 10% + 40% = 50% grid</span></div>
+            </div>
+            <div class="sgp-row sgp-warn">
+              <div class="sgp-cond">Achieved IRR ≥ 85% and &lt; 100%</div>
+              <div class="sgp-arrow">→</div>
+              <div class="sgp-result"><strong>+20%</strong> add-on<br><span class="sgp-note">e.g. 10% + 20% = 30% grid</span></div>
+            </div>
+            <div class="sgp-row sgp-fail">
+              <div class="sgp-cond">Achieved IRR &lt; 85% of target</div>
+              <div class="sgp-arrow">→</div>
+              <div class="sgp-result"><strong>+0%</strong> — No IRR add-on<br><span class="sgp-note">Base 10% still applies if gate passed</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scr-divider"></div>
+
+        <!-- Row 3: PAR -->
+        <div class="sc-row" id="scr-par">
+          <div class="scr-left">
+            <div class="scr-icon" id="scr-par-ico">⬜</div>
+            <div class="scr-info">
+              <div class="scr-title">Portfolio Quality (PAR&gt;1)
+                <button class="scr-guide-btn" onclick="toggleGuide('guide-par')" title="Click to see grid details">ℹ</button>
+              </div>
+              <div class="scr-detail" id="scr-par-detail">— Enter PAR data in Step 2 —</div>
+            </div>
+          </div>
+          <div class="scr-right">
+            <div class="scr-earned" id="scr-par-earned">+0%</div>
+            <div class="scr-tag" id="scr-par-tag">ADD-ON 2</div>
+          </div>
+        </div>
+
+        <!-- PAR guide -->
+        <div class="scr-guide-panel" id="guide-par">
+          <div class="sgp-title">💡 Grid Calculation Detail</div>
+          <div class="sgp-formula">PAR&gt;1 Ratio = New PAR&gt;1 Amount ($) ÷ Total Loan Outstanding ($) × 100%</div>
+          <div class="sgp-rows">
+            <div class="sgp-row sgp-pass">
+              <div class="sgp-cond">PAR&gt;1 Ratio ≤ 0.20%</div>
+              <div class="sgp-arrow">→</div>
+              <div class="sgp-result"><strong>+10%</strong> add-on<br><span class="sgp-note">e.g. 50% + 10% = 60% max grid</span></div>
+            </div>
+            <div class="sgp-row sgp-fail">
+              <div class="sgp-cond">PAR&gt;1 Ratio &gt; 0.20%</div>
+              <div class="sgp-arrow">→</div>
+              <div class="sgp-result"><strong>+0%</strong> — No PAR add-on<br><span class="sgp-note">Keep non-overdue clients below 0.20%</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scr-divider"></div>
+
+        <!-- Total row -->
+        <div class="scr-total-row">
+          <div class="scr-total-label">Total Incentive Grid</div>
+          <div class="scr-total-val" id="scr-total-val">0%</div>
+        </div>
+
+      </div>
+
+      <!-- Formula bar -->
+      <div class="formula-bar">
+        <div class="formula-bar-lbl">💡 Incentive = Total Grid % × Admin Fee Collected</div>
+        <div class="formula-bar-row">
+          <div class="fb-part" id="fbGrid">0%</div>
+          <div class="fb-op">×</div>
+          <div class="fb-part" id="fbFee">$0.00</div>
+          <div class="fb-op">=</div>
+          <div class="fb-result" id="fbRes">$0.00</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Hidden elements kept for JS compatibility -->
+  <div style="display:none">
+    <span id="bPos"></span><span id="idMonth"></span>
+  <div style="display:none">
+    <div id="gateEl"><span id="gateTag"></span><span id="gateIco"></span><span id="gatePct"></span><span id="gateDetail"></span><div id="gateBar"></div><div id="gateMsg"></div><div id="gateLock"></div></div>
+    <div id="addIRR"><span id="addIRRBadge"></span><span id="irrBig"></span><span id="irrTgt"></span><div id="irrBar"></div><span id="irrPctNote"></span><span id="irrStatus"></span><span id="t1"></span><span id="t2"></span><span id="t3"></span></div>
+    <div id="addPAR"><span id="addPARBadge"></span><span id="parBig"></span><span id="parStatus"></span><span id="pt1"></span><span id="pt2"></span></div>
+    <div id="igBase"><span id="igBaseV"></span></div>
+    <div id="igIRR"><span id="igIRRV"></span><span id="igIRRSub"></span></div>
+    <div id="igPAR"><span id="igPARV"></span><span id="igPARSub"></span></div>
+    <div id="igTotal"><span id="igTotalV"></span></div>
+  </div>
+
+  <!-- ══ BREAKDOWN ══ -->
+  <div class="sc">
+    <div class="sc-head-text">
+      <div class="sht-title">Summary &amp; Breakdown</div>
+      <div class="sht-desc">Your monthly incentive breakdown at a glance.</div>
+    </div>
+    <div class="sc-body">
+      <div class="celebr" id="celebEl">
+        <div class="celebr-t">🎉 Maximum Grid Achieved!</div>
+        <div class="celebr-s">60% of Admin Fee Collected — Best possible outcome</div>
+        <div class="celebr-a" id="celebAmt">$0.00</div>
+      </div>
+
+      <!-- 2-col summary grid -->
+      <div class="sum-grid">
+        <div class="sum-item">
+          <div class="sum-lbl">Total Disbursed</div>
+          <div class="sum-val" id="bDisb">$0</div>
+        </div>
+        <div class="sum-item">
+          <div class="sum-lbl">Achievement</div>
+          <div class="sum-val" id="bAchv">—</div>
+        </div>
+        <div class="sum-item">
+          <div class="sum-lbl">Portfolio IRR</div>
+          <div class="sum-val" id="bIRR">—</div>
+        </div>
+        <div class="sum-item">
+          <div class="sum-lbl">PAR&gt;1 Ratio</div>
+          <div class="sum-val" id="bPAR">—</div>
+        </div>
+        <div class="sum-item">
+          <div class="sum-lbl">Admin Fee</div>
+          <div class="sum-val hi" id="bFee">$0.00</div>
+        </div>
+        <div class="sum-item">
+          <div class="sum-lbl">Total Grid</div>
+          <div class="sum-val hi" id="bGrid">0%</div>
+        </div>
+      </div>
+
+      <!-- Grid breakdown inline -->
+      <div class="sum-grid-strip">
+        <div class="sgs-item"><span class="sgs-lbl">Base</span><span class="sgs-val" id="bBase">0%</span></div>
+        <div class="sgs-sep">+</div>
+        <div class="sgs-item"><span class="sgs-lbl">IRR Add-on</span><span class="sgs-val" id="bIRRadd">+0%</span></div>
+        <div class="sgs-sep">+</div>
+        <div class="sgs-item"><span class="sgs-lbl">PAR Add-on</span><span class="sgs-val" id="bPARadd">+0%</span></div>
+        <div class="sgs-sep">=</div>
+        <div class="sgs-item sgs-total"><span class="sgs-lbl">Grid</span><span class="sgs-val" id="bGridInline">0%</span></div>
+      </div>
+
+      <!-- Incentive total -->
+      <div class="sum-incentive-row">
+        <div class="sir-label">💰 Estimated Incentive</div>
+        <div class="sir-val" id="bTotal">$0.00</div>
+      </div>
+
+      <div class="id-card">
+        <div class="id-avatar">👤</div>
+        <div>
+          <div class="id-name" id="idName">—</div>
+          <div class="id-detail" id="idDetail">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-reset" onclick="resetAll()">🔄 Reset All Fields</button>
+</div>
+
+<div id="tip"></div>
+
+<script>
+// ─── Utils ───────────────────────────────────────────────────────────────────
+const $   = id => document.getElementById(id);
+const fmt = n  => '$'+(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const f$  = n  => '$'+(n||0).toLocaleString('en-US',{maximumFractionDigits:0});
+const pct = n  => (n||0).toFixed(2)+'%';
+const clamp = v => Math.min(100,Math.max(0,v));
+function fmtNum(v){const n=parseFloat(v);if(!v||isNaN(n))return '';return n===Math.floor(n)?n.toLocaleString('en-US'):n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+
+// ─── IRR Formula (per specification) ────────────────────────────────────────
+// IRR = ((Admin Fee % / Term) + Interest Rate % + Maintenance Fee %) × 12
+function calcIRR(adminFeeP, term, intRateP, monthlyFeeP){
+  if(!term || term<=0) return 0;
+  return ((adminFeeP/term) + intRateP + monthlyFeeP) * 12;
+}
+
+// ─── Plans ───────────────────────────────────────────────────────────────────
+const PLANS = {
+  SCO:{ disbAmt:25000, irr:16.50, label:'Senior Credit Officer' },
+  CO: { disbAmt:18000, irr:17.50, label:'Credit Officer' },
+  JCO:{ disbAmt:8000,  irr:18.50, label:'Junior Credit Officer' }
+};
+
+// ─── Loans ───────────────────────────────────────────────────────────────────
+let loans = [{id:1,amount:'',term:'',adminFee:'',intRate:'',monthlyFee:''},{id:2,amount:'',term:'',adminFee:'',intRate:'',monthlyFee:''}];
+let nxtId = 3;
+
+function lm(l){
+  const P=parseFloat(l.amount)||0, n=parseInt(l.term)||0;
+  if(P<=0||n<=0) return {irr:0,adminFeeAmt:0,valid:false};
+  const a=parseFloat(l.adminFee)||0, i=parseFloat(l.intRate)||0, f=parseFloat(l.monthlyFee)||0;
+  const irr = calcIRR(a,n,i,f);
+  const adminFeeAmt = P*(a/100);
+  return {irr, adminFeeAmt, valid:true};
+}
+
+// ─── PAR ─────────────────────────────────────────────────────────────────────
+// PAR>1 Ratio = New PAR>1 Amount / Total Loan Outstanding × 100%
+function getPARRatio(){
+  const amt = parseFloat(($('sPARamt').value||'').replace(/,/g,''));
+  const lo  = parseFloat(($('sPARlo').value||'').replace(/,/g,''));
+  if(isNaN(amt)||isNaN(lo)||lo<=0) return null;
+  return (amt / lo) * 100;
+}
+function blurPARamt(){ const v=($('sPARamt').value||'').replace(/,/g,''); if(v) $('sPARamt').value=fmtNum(v); onPAR(); }
+function blurPARlo(){  const v=($('sPARlo').value||'').replace(/,/g,''); if(v) $('sPARlo').value=fmtNum(v); onPAR(); }
+function onPAR(){
+  const amtRaw=($('sPARamt').value||'').replace(/,/g,'');
+  const loRaw =($('sPARlo').value||'').replace(/,/g,'');
+  const amt=parseFloat(amtRaw), lo=parseFloat(loRaw);
+  const eAmt = amtRaw!==''&&(isNaN(amt)||amt<0);
+  const eLO  = loRaw!=='' &&(isNaN(lo) ||lo<=0);
+  $('fPARamt').classList.toggle('err',eAmt);
+  $('fPARamt').classList.toggle('filled', !!amtRaw && !eAmt);
+  $('ePARamt').classList.toggle('show',eAmt);
+  $('fPARlo').classList.toggle('err',eLO);
+  $('fPARlo').classList.toggle('filled', !!loRaw && !eLO);
+  $('ePARlo').classList.toggle('show',eLO);
+  const ratio = getPARRatio();
+  const pill=$('parPill'), val=$('parPillVal'), badge=$('parPillBadge');
+  if(ratio===null||eAmt||eLO){
+    pill.className='totals'; val.textContent='—'; badge.textContent='Enter values above';
+    badge.style.color='var(--t3)';
+  } else {
+    const ok = ratio<=0.20;
+    pill.className='totals '+(ok?'par-strip-ok':'par-strip-no');
+    val.textContent=ratio.toFixed(2)+'%';
+    badge.textContent=ok?'✅ ≤ 0.20% — +10% Earned':'❌ > 0.20% — No Add-on';
+    badge.style.color=ok?'var(--G)':'var(--R)';
+  }
+  updKPI();
+}
+
+// ─── KPIs ─────────────────────────────────────────────────────────────────────
+function kpi(){
+  const disbTarget=parseFloat($('sTarget').value)||0;
+  const irrTarget=parseFloat($('sIrrTarget').value)||0;
+  const newPAR=getPARRatio();
+  const act=loans.filter(l=>parseFloat(l.amount)>0&&parseInt(l.term)>0);
+  const tAmt=act.reduce((s,l)=>s+(parseFloat(l.amount)||0),0);
+  const tFee=act.reduce((s,l)=>s+lm(l).adminFeeAmt,0);
+  const wIRR=tAmt>0?act.reduce((s,l)=>s+lm(l).irr*(parseFloat(l.amount)||0),0)/tAmt:0;
+  const disbAchv=disbTarget>0?(tAmt/disbTarget*100):0;
+  const irrAchv=irrTarget>0?(wIRR/irrTarget*100):0;
+  const gatePass=disbTarget>0&&disbAchv>=100;
+  let base=0,irrA=0,parA=0;
+  if(gatePass){
+    base=10;
+    if(irrTarget>0){if(irrAchv>=100)irrA=40;else if(irrAchv>=85)irrA=20;}
+    if(newPAR!==null&&newPAR<=0.20)parA=10;
+  }
+  const grid=base+irrA+parA;
+  const incentive=tFee*grid/100;
+  return {tAmt,tFee,wIRR,disbTarget,irrTarget,newPAR,disbAchv,irrAchv,gatePass,base,irrA,parA,grid,incentive};
+}
+
+
+function updCompletion(k){
+  // Step 1: Setup — position selected
+  const s1 = !!$('sPos').value;
+  // Step 2: Loans — at least 1 complete loan
+  const s2 = loans.some(l=>l.amount&&l.term&&l.adminFee&&l.intRate&&l.monthlyFee);
+  // Step 3: PAR — both fields filled
+  const s3 = getPARRatio() !== null;
+  // Step 4: Results ready
+  const s4 = k.disbTarget > 0 && k.tAmt > 0 && s3;
+
+  function set(dotId, sepId, done, partial){
+    const d=$(dotId), s=sepId?$(sepId):null;
+    if(!d) return;
+    d.className='comp-dot'+(done?' done':partial?' partial':'');
+    if(s) s.className='comp-sep'+(done?' done':'');
+  }
+  set('compDot1','compSep1', s1, false);
+  set('compDot2','compSep2', s2, loans.some(l=>l.amount||l.term));
+  set('compDot3','compSep3', s3, false);
+  set('compDot4', null, s4, k.disbTarget>0&&k.tAmt>0);
+}
+
+
+function updKPI(){
+  const k=kpi();
+
+  // Hero — always update first so a crash below never blocks it
+  $('heroAmt').textContent=fmt(k.incentive);
+  const hs=$('heroStatus');
+  if(k.disbTarget<=0)               hs.innerHTML='<span class="s-wait">— Select your position —</span>';
+  else if(!k.gatePass&&k.tAmt===0)  hs.innerHTML='<span class="s-wait">Add loan data to begin</span>';
+  else if(!k.gatePass)              hs.innerHTML='<span class="s-no">❌ GATE FAILED</span>';
+  else if(k.grid===60)              hs.innerHTML='<span class="s-ok">🌟 MAX 60%</span>';
+  else if(k.grid>=10)               hs.innerHTML='<span class="s-ok">✅ GATE PASSED</span>';
+  else                              hs.innerHTML='<span class="s-mid">⚠ BASE ONLY</span>';
+
+  updCompletion(k);
+
+  // Totals
+  $('totDisb').textContent=f$(k.tAmt);
+  $('totFee').textContent=fmt(k.tFee);
+  $('totIRR').textContent=k.tAmt>0?pct(k.wIRR):'—';
+
+  // Gate
+  const ge=$('gateEl');
+  ge.className='gate';
+  if(k.disbTarget<=0){
+    $('gatePct').textContent='—'; $('gatePct').className='gate-pct';
+    $('gateBar').style.width='0%'; $('gateBar').className='gate-bar';
+    $('gateIco').textContent='⬜'; $('gateIco').style.opacity='.3';
+    $('gateMsg').textContent='— Select position and enter loan data —';
+    $('gateLock').style.display='none'; $('gateTag').textContent='GATE';
+  } else {
+    $('gatePct').textContent=k.disbAchv.toFixed(1)+'%';
+    $('gateDetail').textContent=`of ${f$(k.disbTarget)} target`;
+    $('gateBar').style.width=clamp(k.disbAchv)+'%';
+    if(k.gatePass){
+      ge.classList.add('pass');
+      $('gateBar').className='gate-bar'; // green via CSS
+      $('gatePct').className='gate-pct'; // green via CSS
+      $('gateIco').textContent='✅'; $('gateIco').style.opacity='1';
+      $('gateTag').textContent='PASSED ✓';
+      $('gateMsg').textContent=`✅ ${k.disbAchv.toFixed(1)}% achieved — Gate passed. Incentive unlocked.`;
+      $('gateLock').style.display='none';
+    } else {
+      ge.classList.add('fail');
+      $('gatePct').className='gate-pct';
+      $('gateIco').textContent='❌'; $('gateIco').style.opacity='1';
+      $('gateTag').textContent='FAILED ✗';
+      const need=k.disbTarget-k.tAmt;
+      $('gateMsg').textContent=`❌ Need ${f$(need)} more to reach 100% — No incentive yet`;
+      $('gateLock').style.display='flex';
+    }
+  }
+
+  // Grid
+  $('igBase').className='ig '+(k.base>0?'on':'off');
+  $('igBaseV').textContent=k.base+'%';
+  $('igIRR').className='ig '+(k.irrA>0?'on':'off');
+  $('igIRRV').textContent='+'+k.irrA+'%';
+  $('igIRRSub').textContent=k.irrA===40?'≥100% ✓':k.irrA===20?'≥85% ✓':'≥100%→+40';
+  $('igPAR').className='ig '+(k.parA>0?'on':'off');
+  $('igPARV').textContent='+'+k.parA+'%';
+  $('igPARSub').textContent=k.parA===10?'≤0.20% ✓':'≤0.20%→+10';
+  $('igTotalV').textContent=k.grid+'%';
+
+  // IRR Addon
+  const ac=$('addIRR');
+  if(k.irrTarget<=0){
+    ac.className='addon'; $('addIRRBadge').textContent='+0%';
+    $('irrBig').textContent='—'; $('irrTgt').textContent='Select position to set IRR target';
+    $('irrBar').style.width='0%'; $('irrBar').className='addon-bar';
+    $('irrPctNote').textContent='—'; $('irrPctNote').className='addon-pct-note';
+    $('irrStatus').textContent='— Select position and enter loan data —';
+    ['t1','t2','t3'].forEach(id=>$(id).className='tier');
+  } else {
+    $('irrBig').textContent=k.tAmt>0?pct(k.wIRR):'—';
+    $('irrTgt').textContent=`target: ${pct(k.irrTarget)}`;
+    $('irrBar').style.width=clamp(k.irrAchv)+'%';
+    if(k.irrA===40){
+      ac.className='addon earn'; $('addIRRBadge').textContent='+40%';
+      $('irrBar').className='addon-bar ok'; $('irrPctNote').className='addon-pct-note ok';
+      $('irrPctNote').textContent=k.irrAchv.toFixed(1)+'% of target';
+      $('irrStatus').textContent=`✅ IRR ${k.irrAchv.toFixed(1)}% of target ≥ 100% — +40% add-on earned`;
+      $('t1').className='tier on'; $('t2').className='tier'; $('t3').className='tier';
+    } else if(k.irrA===20){
+      ac.className='addon part'; $('addIRRBadge').textContent='+20%';
+      $('irrBar').className='addon-bar mid'; $('irrPctNote').className='addon-pct-note mid';
+      $('irrPctNote').textContent=k.irrAchv.toFixed(1)+'% of target';
+      $('irrStatus').textContent=`⚠ IRR ${k.irrAchv.toFixed(1)}% of target ≥ 85% — +20% add-on earned`;
+      $('t1').className='tier'; $('t2').className='tier on-mid'; $('t3').className='tier';
+    } else {
+      ac.className='addon miss'; $('addIRRBadge').textContent='+0%';
+      $('irrBar').className='addon-bar'; $('irrPctNote').className='addon-pct-note';
+      $('irrPctNote').textContent=k.tAmt>0?k.irrAchv.toFixed(1)+'% of target':'—';
+      $('irrStatus').textContent=k.tAmt>0?`❌ IRR ${k.irrAchv.toFixed(1)}% of target — Need ≥ 85% to earn add-on`:'— Enter loan data to calculate IRR —';
+      ['t1','t2','t3'].forEach(id=>$(id).className='tier');
+    }
+  }
+
+  // PAR Addon
+  const pa=$('addPAR');
+  const par=k.newPAR;
+  $('parBig').textContent=par!==null?par.toFixed(2)+'%':'—';
+  if(par===null){
+    pa.className='addon'; $('addPARBadge').textContent='+0%';
+    $('parStatus').textContent='— Enter PAR>1 Amount & Total L/O in Step 2 —';
+    $('pt1').className='tier'; $('pt2').className='tier';
+  } else if(k.parA===10){
+    pa.className='addon earn'; $('addPARBadge').textContent='+10%';
+    $('parStatus').textContent=`✅ PAR>1 Ratio ${par.toFixed(2)}% ≤ 0.20% — +10% add-on earned`;
+    $('pt1').className='tier on'; $('pt2').className='tier';
+  } else {
+    pa.className='addon miss'; $('addPARBadge').textContent='+0%';
+    $('parStatus').textContent=`❌ PAR>1 Ratio ${par.toFixed(2)}% exceeds 0.20% — No PAR add-on`;
+    $('pt1').className='tier'; $('pt2').className='tier';
+  }
+
+  // Formula bar
+  $('fbGrid').textContent=k.grid+'%';
+  $('fbFee').textContent=fmt(k.tFee);
+  $('fbRes').textContent=fmt(k.incentive);
+
+  // Scorecard
+  updScorecard(k);
+
+  // What-if
+  renderWI(k);
+
+  // Breakdown
+  const pos=$('sPos').value;
+  $('bPos').textContent=pos&&PLANS[pos]?`${pos} — ${PLANS[pos].label}`:'—';
+  $('bDisb').textContent=f$(k.tAmt);
+  $('bAchv').textContent=k.disbTarget>0?(k.disbAchv.toFixed(1)+'% '+(k.gatePass?'✅':'❌')):'—';
+  $('bIRR').textContent=k.tAmt>0&&k.irrTarget>0?`${pct(k.wIRR)} (target ${pct(k.irrTarget)})`:'—';
+  $('bPAR').textContent=par!==null?par.toFixed(2)+'%':'—';
+  $('bFee').textContent=fmt(k.tFee);
+  $('bBase').textContent=k.base+'%';
+  $('bIRRadd').textContent='+'+k.irrA+'%';
+  $('bPARadd').textContent='+'+k.parA+'%';
+  $('bGrid').textContent=k.grid+'%';
+  if($('bGridInline')) $('bGridInline').textContent=k.grid+'%';
+  $('bTotal').textContent=fmt(k.incentive);
+
+  // Celebration
+  const cb=$('celebEl');
+  if(k.gatePass&&k.grid===60&&k.tFee>0){cb.classList.add('show');$('celebAmt').textContent=fmt(k.incentive);}
+  else cb.classList.remove('show');
+}
+
+// ─── What-If ──────────────────────────────────────────────────────────────────
+function renderWI(k){
+  const body=$('wiBody');
+  if(!body)return;
+  body.querySelectorAll('.wi-row,.wi-note').forEach(e=>e.remove());
+  const empty=$('wiEmpty');
+  if(!empty)return;
+  const ready=k.tFee>0&&k.disbTarget>0;
+  if(!ready){empty.style.display='block';empty.textContent='Enter position, loans & PAR data to see scenarios';return;}
+  empty.style.display='none';
+  if(!k.gatePass){
+    empty.style.display='block';
+    empty.className='wi-gate-notice';
+    empty.textContent='🔒 Gate not passed — all scenarios show $0 until 100% disbursement achieved';
+    return;
+  }
+  empty.className='wi-empty';
+  const note=document.createElement('div');
+  note.className='wi-note';
+  note.textContent=`Admin Fee: ${fmt(k.tFee)} · PAR add-on: ${k.parA>0?'+10% ✅':'+0% ❌'}`;
+  body.insertBefore(note,null);
+  const scen=[
+    {label:'IRR ≥ 100% of target',irrA:40,icon:'🌟'},
+    {label:'IRR ≥ 85% and < 100%', irrA:20,icon:'✅'},
+    {label:'IRR < 85% of target',  irrA:0, icon:'⚠'},
+  ];
+  scen.forEach(sc=>{
+    const g=10+sc.irrA+k.parA;
+    const amt=k.tFee*g/100;
+    const cur=sc.irrA===k.irrA;
+    const row=document.createElement('div');
+    row.className='wi-row'+(cur?' cur':'');
+    row.innerHTML=`<div class="wi-icon">${sc.icon}</div><div class="wi-scenario">${sc.label}</div><div class="wi-g">${g}%</div><div class="wi-amt">${fmt(amt)}</div>${cur?'<div class="wi-cur-tag" style="grid-column:1/-1">▲ Your current scenario</div>':''}`;
+    body.appendChild(row);
+  });
+}
+
+// ─── Scorecard renderer ───────────────────────────────────────────────────────
+function updScorecard(k){
+  // ── Row 1: Gate ──
+  const gRow = $('scr-gate');
+  const gBar  = $('scrGateBar');
+  const gLock = $('scrGateLock');
+  if(k.disbTarget<=0){
+    $('scr-gate-ico').textContent='⬜';
+    $('scr-gate-detail').textContent='— Select position and enter loans —';
+    $('scr-gate-detail').className='scr-detail';
+    $('scr-gate-earned').textContent='+10%';
+    $('scr-gate-earned').className='scr-earned locked';
+    $('scr-gate-tag').textContent='GATE';
+    $('scr-gate-tag').className='scr-tag';
+    gBar.style.width='0%'; gBar.className='scr-bar';
+    gLock.className='scr-gate-lock';
+  } else if(k.gatePass){
+    $('scr-gate-ico').textContent='✅';
+    $('scr-gate-detail').textContent=`${k.disbAchv.toFixed(1)}% of $${k.disbTarget.toLocaleString('en-US')} target achieved`;
+    $('scr-gate-detail').className='scr-detail ok';
+    $('scr-gate-earned').textContent='+10%';
+    $('scr-gate-earned').className='scr-earned base';
+    $('scr-gate-tag').textContent='PASSED ✓';
+    $('scr-gate-tag').className='scr-tag pass';
+    gBar.style.width='100%'; gBar.className='scr-bar ok';
+    gLock.className='scr-gate-lock';
+  } else {
+    $('scr-gate-ico').textContent='❌';
+    const need=k.disbTarget-k.tAmt;
+    $('scr-gate-detail').textContent=`${k.disbAchv.toFixed(1)}% achieved — Need $${need.toLocaleString('en-US',{maximumFractionDigits:0})} more`;
+    $('scr-gate-detail').className='scr-detail no';
+    $('scr-gate-earned').textContent='+0%';
+    $('scr-gate-earned').className='scr-earned locked';
+    $('scr-gate-tag').textContent='FAILED ✗';
+    $('scr-gate-tag').className='scr-tag fail';
+    gBar.style.width=Math.min(100,k.disbAchv)+'%'; gBar.className='scr-bar';
+    gLock.className='scr-gate-lock show';
+  }
+
+  // ── Row 2: IRR ──
+  if(k.irrTarget<=0 || k.tAmt===0){
+    $('scr-irr-ico').textContent='⬜';
+    $('scr-irr-detail').textContent='— Enter loans to calculate —';
+    $('scr-irr-detail').className='scr-detail';
+    $('scr-irr-earned').textContent='+?%';
+    $('scr-irr-earned').className='scr-earned locked';
+    $('scr-irr-tag').textContent='ADD-ON 1';
+    $('scr-irr-tag').className='scr-tag';
+  } else if(!k.gatePass){
+    $('scr-irr-ico').textContent='🔒';
+    $('scr-irr-detail').textContent=`IRR ${pct(k.wIRR)} vs target ${pct(k.irrTarget)} — locked until gate passes`;
+    $('scr-irr-detail').className='scr-detail';
+    $('scr-irr-earned').textContent='+0%';
+    $('scr-irr-earned').className='scr-earned locked';
+    $('scr-irr-tag').textContent='LOCKED';
+    $('scr-irr-tag').className='scr-tag fail';
+  } else if(k.irrA===40){
+    $('scr-irr-ico').textContent='✅';
+    $('scr-irr-detail').textContent=`IRR ${pct(k.wIRR)} ≥ 100% of target ${pct(k.irrTarget)}`;
+    $('scr-irr-detail').className='scr-detail ok';
+    $('scr-irr-earned').textContent='+40%';
+    $('scr-irr-earned').className='scr-earned ok';
+    $('scr-irr-tag').textContent='EARNED ✓';
+    $('scr-irr-tag').className='scr-tag earn';
+  } else if(k.irrA===20){
+    $('scr-irr-ico').textContent='⚠️';
+    $('scr-irr-detail').textContent=`IRR ${pct(k.wIRR)} — ${k.irrAchv.toFixed(1)}% of target (≥85% ✓)`;
+    $('scr-irr-detail').className='scr-detail warn';
+    $('scr-irr-earned').textContent='+20%';
+    $('scr-irr-earned').className='scr-earned warn';
+    $('scr-irr-tag').textContent='PARTIAL ✓';
+    $('scr-irr-tag').className='scr-tag part';
+  } else {
+    $('scr-irr-ico').textContent='❌';
+    $('scr-irr-detail').textContent=`IRR ${pct(k.wIRR)} — ${k.irrAchv.toFixed(1)}% of target (need ≥85%)`;
+    $('scr-irr-detail').className='scr-detail no';
+    $('scr-irr-earned').textContent='+0%';
+    $('scr-irr-earned').className='scr-earned locked';
+    $('scr-irr-tag').textContent='NOT EARNED';
+    $('scr-irr-tag').className='scr-tag fail';
+  }
+
+  // ── Row 3: PAR ──
+  const par=k.newPAR;
+  if(par===null){
+    $('scr-par-ico').textContent='⬜';
+    $('scr-par-detail').textContent='— Enter PAR data in Step 2 —';
+    $('scr-par-detail').className='scr-detail';
+    $('scr-par-earned').textContent='+?%';
+    $('scr-par-earned').className='scr-earned locked';
+    $('scr-par-tag').textContent='ADD-ON 2';
+    $('scr-par-tag').className='scr-tag';
+  } else if(!k.gatePass){
+    $('scr-par-ico').textContent='🔒';
+    $('scr-par-detail').textContent=`PAR>1 Ratio ${par.toFixed(2)}% — locked until gate passes`;
+    $('scr-par-detail').className='scr-detail';
+    $('scr-par-earned').textContent='+0%';
+    $('scr-par-earned').className='scr-earned locked';
+    $('scr-par-tag').textContent='LOCKED';
+    $('scr-par-tag').className='scr-tag fail';
+  } else if(k.parA===10){
+    $('scr-par-ico').textContent='✅';
+    $('scr-par-detail').textContent=`PAR>1 Ratio ${par.toFixed(2)}% ≤ 0.20% threshold`;
+    $('scr-par-detail').className='scr-detail ok';
+    $('scr-par-earned').textContent='+10%';
+    $('scr-par-earned').className='scr-earned ok';
+    $('scr-par-tag').textContent='EARNED ✓';
+    $('scr-par-tag').className='scr-tag earn';
+  } else {
+    $('scr-par-ico').textContent='❌';
+    $('scr-par-detail').textContent=`PAR>1 Ratio ${par.toFixed(2)}% > 0.20% threshold`;
+    $('scr-par-detail').className='scr-detail no';
+    $('scr-par-earned').textContent='+0%';
+    $('scr-par-earned').className='scr-earned locked';
+    $('scr-par-tag').textContent='NOT EARNED';
+    $('scr-par-tag').className='scr-tag fail';
+  }
+
+  // ── Total row ──
+  $('scr-total-val').textContent=k.grid+'% of Admin Fee';
+}
+
+// ─── Loan Render ──────────────────────────────────────────────────────────────
+function renderLoans(){
+  const list=$('loanList');
+  list.innerHTML='';
+  loans.forEach((l,i)=>{
+    const m=lm(l);
+    const has=!!(l.amount||l.term||l.adminFee||l.intRate||l.monthlyFee);
+    const done=!!(l.amount&&l.term&&l.adminFee&&l.intRate&&l.monthlyFee);
+    const c=document.createElement('div');
+    c.className='lc'+(has?' has':'')+(done?' done':'');
+    c.setAttribute('data-id',l.id);
+    const mMain=m.valid?`${fmtNum(l.amount)} · ${l.term} months`:(has?'Incomplete — expand to fill':'Tap to enter loan details');
+    const mSub=m.valid?`IRR: ${pct(m.irr)} · Admin Fee: ${fmt(m.adminFeeAmt)}`:(has?'IRR calculates once Amount & Term are set':'Amount · Term · Fees');
+    c.innerHTML=`
+    <div class="lc-hdr" onclick="toggleLC(this)">
+      <div class="lc-num">${i+1}</div>
+      <div class="lc-info">
+        <div class="lc-main">${mMain}</div>
+        <div class="lc-sub">${mSub}</div>
+      </div>
+      <div class="lc-r">
+        ${m.valid?`<div class="lc-irr">${pct(m.irr)}</div>`:''}
+        <div class="lc-dot"></div>
+        <div class="lc-chev"><svg width="9" height="6" viewBox="0 0 10 7" fill="none"><path d="M1 1l4 4 4-4" stroke="var(--t3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </div>
+    </div>
+    <div class="lc-body">
+      <div class="lc-out">
+        <div>
+          <div class="lco-lbl">Annual IRR (%)</div>
+          <div class="lco-val${m.valid?'':' empty'}" id="oi-${l.id}">${m.valid?pct(m.irr):'—'}</div>
+          <div class="lco-note" id="on-${l.id}">${m.valid?`= ((${l.adminFee||'?'}÷${l.term||'?'}) + ${l.intRate||'?'} + ${l.monthlyFee||'?'}) × 12`:''}</div>
+        </div>
+        <div>
+          <div class="lco-lbl">Admin Fee ($)</div>
+          <div class="lco-val${m.valid?'':' empty'}" id="oa-${l.id}">${m.valid?fmt(m.adminFeeAmt):'—'}</div>
+          <div class="lco-note">${m.valid?`${l.amount||'?'} × ${l.adminFee||'?'}%`:''}</div>
+        </div>
+      </div>
+      <div class="li-grid">
+        <div class="li-f">
+          <div class="li-lbl">Dis. Amount ($) <span class="li-star">*</span><span class="tip" data-tip="Disbursed amount in USD. e.g. 5,000">?</span></div>
+          <input class="li-inp${l.amount?' ok':''}" type="text" inputmode="numeric" data-lid="${l.id}" data-f="amount" value="${fmtNum(l.amount)}" placeholder="e.g. 5,000">
+          <div class="li-ferr" id="fe-${l.id}-amount"></div>
+        </div>
+        <div class="li-f">
+          <div class="li-lbl">Term (months) <span class="li-star">*</span><span class="tip" data-tip="Loan term in whole months. e.g. 12 or 24">?</span></div>
+          <input class="li-inp${l.term?' ok':''}" type="number" data-lid="${l.id}" data-f="term" value="${l.term}" placeholder="e.g. 12">
+          <div class="li-ferr" id="fe-${l.id}-term"></div>
+        </div>
+        <div class="li-f">
+          <div class="li-lbl">Admin Fee % <span class="li-star">*</span><span class="tip" data-tip="One-time upfront admin fee as % of loan amount. e.g. 1.5">?</span></div>
+          <input class="li-inp${l.adminFee?' ok':''}" type="number" step="0.01" data-lid="${l.id}" data-f="adminFee" value="${l.adminFee}" placeholder="e.g. 1.5">
+          <div class="li-ferr" id="fe-${l.id}-adminFee"></div>
+        </div>
+        <div class="li-f">
+          <div class="li-lbl">Interest Rate % <span class="li-star">*</span><span class="tip" data-tip="Monthly flat interest rate. e.g. 1.5 = 1.5%/month">?</span></div>
+          <input class="li-inp${l.intRate?' ok':''}" type="number" step="0.01" data-lid="${l.id}" data-f="intRate" value="${l.intRate}" placeholder="e.g. 1.5">
+          <div class="li-ferr" id="fe-${l.id}-intRate"></div>
+        </div>
+        <div class="li-f" style="grid-column:1/-1">
+          <div class="li-lbl">Maintenance Fee % <span class="li-star">*</span><span class="tip" data-tip="A fixed monthly fee charged to the borrower each month throughout the loan term. e.g. 0.3 = 0.3%/month">?</span></div>
+          <input class="li-inp${l.monthlyFee?' ok':''}" type="number" step="0.01" data-lid="${l.id}" data-f="monthlyFee" value="${l.monthlyFee}" placeholder="e.g. 0.3">
+          <div class="li-ferr" id="fe-${l.id}-monthlyFee"></div>
+        </div>
+      </div>
+      ${loans.length>1?`<button class="btn-rm" data-lid="${l.id}">✕ Remove this loan</button>`:''}
+    </div>`;
+    list.appendChild(c);
+  });
+  attachLC();
+  $('lCount').textContent=`${loans.length} / 20 loans`;
+}
+
+function attachLC(){
+  $('loanList').querySelectorAll('.li-inp').forEach(inp=>{
+    inp.addEventListener('input',function(){
+      const raw=this.value.replace(/,/g,''), fld=this.dataset.f, lid=+this.dataset.lid;
+      const err=validateF(raw,fld);
+      const eEl=$(`fe-${lid}-${fld}`);
+      this.classList.toggle('bad',!!err); this.classList.toggle('ok',!!raw&&!err);
+      if(eEl){eEl.textContent=err?'⚠ '+err:'';eEl.classList.toggle('show',!!err);}
+      this.closest('.li-f').classList.toggle('done',!!raw&&!err);
+      upd(lid,fld,err?'':raw);
+    });
+    inp.addEventListener('focus',function(){if(this.dataset.f==='amount')this.value=this.value.replace(/,/g,'');});
+    inp.addEventListener('blur',function(){
+      if(this.dataset.f==='amount')this.value=fmtNum(this.value.replace(/,/g,''));
+      const raw=this.value.replace(/,/g,'');
+      const err=validateF(raw,this.dataset.f);
+      this.classList.toggle('bad',!!err); this.classList.toggle('ok',!!raw&&!err);
+      this.closest('.li-f').classList.toggle('done',!!raw&&!err);
+    });
+  });
+  $('loanList').querySelectorAll('.btn-rm').forEach(b=>b.addEventListener('click',()=>rmLoan(+b.dataset.lid)));
+}
+
+function validateF(v,f){
+  const n=parseFloat(v);
+  if(!v)return null;
+  if(isNaN(n)||n<0)return 'Must be 0 or more';
+  if(f==='amount'&&n===0)return 'Must be > 0';
+  if(f==='term'&&(n<=0||!Number.isInteger(n)))return 'Whole months only (e.g. 12)';
+  if(['adminFee','intRate','monthlyFee'].includes(f)&&n>100)return 'Seems too high (>100%)';
+  return null;
+}
+
+function toggleLC(hdr){
+  const c=hdr.closest('.lc'), was=c.classList.contains('open-state');
+  document.querySelectorAll('.lc.open-state').forEach(x=>x.classList.remove('open-state'));
+  if(!was)c.classList.add('open-state');
+}
+
+function updLCOut(id){
+  const l=loans.find(x=>x.id===id); if(!l)return;
+  const m=lm(l);
+  const io=$(`oi-${id}`), ao=$(`oa-${id}`), no=$(`on-${id}`);
+  if(io){io.textContent=m.valid?pct(m.irr):'—';io.className='lco-val'+(m.valid?'':' empty');}
+  if(ao){ao.textContent=m.valid?fmt(m.adminFeeAmt):'—';ao.className='lco-val'+(m.valid?'':' empty');}
+  if(no) no.textContent=m.valid?`= ((${l.adminFee||'?'}÷${l.term||'?'}) + ${l.intRate||'?'} + ${l.monthlyFee||'?'}) × 12`:'';
+  const c=document.querySelector(`.lc[data-id="${id}"]`); if(!c)return;
+  const has=!!(l.amount||l.term||l.adminFee||l.intRate||l.monthlyFee);
+  const done=!!(l.amount&&l.term&&l.adminFee&&l.intRate&&l.monthlyFee);
+  c.classList.toggle('has',has); c.classList.toggle('done',done);
+  const mn=c.querySelector('.lc-main'), sb=c.querySelector('.lc-sub'), cr=c.querySelector('.lc-r'), b=c.querySelector('.lc-irr');
+  if(mn)mn.textContent=m.valid?`${fmtNum(l.amount)} · ${l.term} months`:(has?'Incomplete — expand to fill':'Tap to enter loan details');
+  if(sb)sb.textContent=m.valid?`IRR: ${pct(m.irr)} · Admin Fee: ${fmt(m.adminFeeAmt)}`:(has?'IRR calculates once Amount & Term are set':'Amount · Term · Fees');
+  if(m.valid&&!b){const nb=document.createElement('div');nb.className='lc-irr';nb.textContent=pct(m.irr);cr.insertBefore(nb,cr.querySelector('.lc-chev'));}
+  else if(m.valid&&b)b.textContent=pct(m.irr);
+  else if(!m.valid&&b)b.remove();
+}
+
+function upd(id,f,v){loans=loans.map(l=>l.id===id?{...l,[f]:v}:l);updLCOut(id);updKPI();}
+function addLoan(){if(loans.length>=20)return;const nid=nxtId++;loans.push({id:nid,amount:'',term:'',adminFee:'',intRate:'',monthlyFee:''});renderLoans();document.querySelector(`.lc[data-id="${nid}"]`)?.classList.add('open-state');updKPI();}
+function rmLoan(id){if(loans.length<=1)return;loans=loans.filter(l=>l.id!==id);renderLoans();updKPI();}
+
+// ─── Position / Month ─────────────────────────────────────────────────────────
+function onPos(){
+  const pos=$('sPos').value;
+  if(pos&&PLANS[pos]){
+    const p=PLANS[pos];
+    $('sTarget').value=p.disbAmt; $('sIrrTarget').value=p.irr.toFixed(2);
+    $('planPill').innerHTML=`📊 <strong>${pos}</strong> &nbsp;·&nbsp; Dis. Target: <strong>$${p.disbAmt.toLocaleString('en-US')}</strong> &nbsp;·&nbsp; IRR Target ≥ <strong>${p.irr.toFixed(2)}%</strong> &nbsp;·&nbsp; PAR&gt;1 ≤ <strong>0.20%</strong>`;
+  } else {
+    $('sTarget').value=''; $('sIrrTarget').value='';
+    $('planPill').textContent='📊 Select a position to see your monthly targets';
+  }
+  updTag(); updKPI();
+}
+function onMonth(){
+  const m=$('sMonth').value;
+  $('hdrMonth').textContent=m||'—';
+  $('idMonth').textContent=m||'—';
+  $('phMonth').textContent=m||'—';
+}
+function updTag(){
+  const pos=$('sPos').value, name=$('sName').value, branch=$('sBranch').value;
+  $('idName').textContent=name||'—';
+  const pl=pos&&PLANS[pos]?`${pos} — ${PLANS[pos].label}`:(pos||'—');
+  $('idDetail').textContent=[pl,branch?`· ${branch}`:''].filter(Boolean).join(' ');
+  $('phName').textContent=[name,pl,branch].filter(Boolean).join(' · ');
+}
+function mF(fid,iid){const el=$(iid);$(fid).classList.toggle('filled',!!(el&&el.value));}
+function toggleGuide(id){
+  const panel=$(id);
+  const isOpen=panel.classList.contains('open');
+  document.querySelectorAll('.scr-guide-panel.open').forEach(p=>p.classList.remove('open'));
+  document.querySelectorAll('.scr-guide-btn.open').forEach(b=>b.classList.remove('open'));
+  if(!isOpen){
+    panel.classList.add('open');
+    document.querySelectorAll('.scr-guide-btn').forEach(b=>{
+      if(b.getAttribute('onclick')===`toggleGuide('${id}')`) b.classList.add('open');
+    });
+  }
+}
+function toggleCrit(btn){
+  const body=btn.nextElementSibling, arrow=btn.querySelector('.crit-arrow');
+  body.classList.toggle('open'); 
+  const isOpen = body.classList.contains('open');
+  arrow.classList.toggle('open', isOpen);
+  btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+}
+
+// ─── Reset ────────────────────────────────────────────────────────────────────
+function resetAll(){
+  ['sPos','sName','sBranch','sMonth','sTarget','sIrrTarget','sPARamt','sPARlo'].forEach(id=>{const e=$(id);if(e)e.value='';});
+  $('hdrMonth').textContent='—';
+  ['fPos','fMonth','fPARamt','fPARlo'].forEach(id=>{$(id).classList.remove('filled','err');});
+  const pp=$('parPill'); if(pp){pp.className='totals';}
+  const pv=$('parPillVal'); if(pv) pv.textContent='—';
+  const pb=$('parPillBadge'); if(pb){pb.textContent='Enter values above';pb.style.color='var(--t3)';}
+  $('planPill').textContent='📊 Select a position to see your monthly targets';
+  loans=[{id:1,amount:'',term:'',adminFee:'',intRate:'',monthlyFee:''},{id:2,amount:'',term:'',adminFee:'',intRate:'',monthlyFee:''}];
+  nxtId=3; renderLoans(); updTag(); updKPI();
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+(function(){
+  // Dynamically populate month dropdown: 3 months back through 12 months forward
+  const mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const d=new Date(), sel=$('sMonth');
+  const startOffset=-3, endOffset=12;
+  for(let i=startOffset;i<=endOffset;i++){
+    const dt=new Date(d.getFullYear(), d.getMonth()+i, 1);
+    const label=mo[dt.getMonth()]+' '+dt.getFullYear();
+    const opt=document.createElement('option');
+    opt.value=label; opt.textContent=label;
+    sel.appendChild(opt);
+  }
+  // Auto-select current month
+  const curLabel=mo[d.getMonth()]+' '+d.getFullYear();
+  for(let i=0;i<sel.options.length;i++){
+    if(sel.options[i].value===curLabel){sel.selectedIndex=i;break;}
+  }
+  const m=sel.value;
+  $('hdrMonth').textContent=m||'—'; $('idMonth').textContent=m||'—'; $('phMonth').textContent=m||'—';
+  if(m)$('fMonth').classList.add('filled');
+})();
+renderLoans();
+document.querySelector('.lc')?.classList.add('open-state');
+updKPI(); updTag();
+
+function adjOffset(){
+  requestAnimationFrame(function(){
+    const hdr = document.querySelector('.hdr');
+    const hero = document.getElementById('heroWrap');
+    if(!hdr || !hero) return;
+    const hh = hdr.offsetHeight;
+    hero.style.top = hh + 'px';
+    const totalOffset = hh + hero.offsetHeight + 12;
+    document.querySelector('.page').style.paddingTop = totalOffset + 'px';
+  });
+}
+// Run immediately, after load, after fonts render, and on resize
+adjOffset();
+document.addEventListener('DOMContentLoaded', adjOffset);
+window.addEventListener('load', adjOffset);
+if(document.fonts && document.fonts.ready){
+  document.fonts.ready.then(adjOffset);
+}
+window.addEventListener('resize', adjOffset);
+</script>
+
+<script>
+// Tooltip
+(function(){
+  const b=document.getElementById('tip');
+  function show(ic){
+    b.textContent=ic.getAttribute('data-tip'); b.style.display='block';
+    const r=ic.getBoundingClientRect(), bw=190;
+    let L=r.left+r.width/2-bw/2, T=r.top-b.offsetHeight-8;
+    if(L<8)L=8; if(L+bw>window.innerWidth-8)L=window.innerWidth-bw-8;
+    if(T<8)T=r.bottom+8;
+    b.style.left=L+'px'; b.style.top=T+'px';
+  }
+  document.addEventListener('mouseover',e=>{const ic=e.target.closest('.tip');if(ic)show(ic);else b.style.display='none';});
+  document.addEventListener('mouseout', e=>{if(e.target.closest('.tip'))b.style.display='none';});
+  document.addEventListener('touchstart',e=>{const ic=e.target.closest('.tip');if(ic){show(ic);setTimeout(()=>b.style.display='none',2200);}},{passive:true});
+})();
+</script>
+
+</body>
+</html>

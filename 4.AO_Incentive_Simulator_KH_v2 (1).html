@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>កម្មវិធីគណនាប្រាក់លើកទឹកចិត្ត AO | ChokChey Finance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&family=Moul&display=swap" rel="stylesheet">
+<style>
+/* ─── BASE ───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --tiffany:   #2EA8A3;
+  --tiffany-d: #1e8f8a;
+  --tiffany-l: #d0f5f3;
+  --tiffany-xl:#e8faf9;
+  --navy:      #1a2744;
+  --navy-l:    #2d3f6b;
+  --navy-xl:   #eef1f8;
+  --pink:      #F472B6;
+  --pink-l:    #fde8f4;
+  --pink-d:    #c4177a;
+  --pass:      #16a34a;
+  --pass-bg:   #f0fdf4;
+  --pass-bdr:  #86efac;
+  --fail:      #dc2626;
+  --fail-bg:   #fef2f2;
+  --fail-bdr:  #fca5a5;
+  --warn:      #9a3a8a;
+  --warn-bg:   #fdf0fa;
+  --warn-bdr:  #e8a8dc;
+  --card:      #ffffff;
+  --bg:        #e8eff6;
+  --border:    #d4dae3;
+  --text:      #0f1c35;
+  --text2:     #4b5a72;
+  --text3:     #8a96a8;
+  --soft:      #f0f3f7;
+  --radius:    14px;
+  --req-border: #F472B6;
+  --req-glow:   rgba(244,114,182,0.15);
+  --req-bg:     #fff8fc;
+  --red:       var(--fail);
+  --red-bg:    var(--fail-bg);
+  --red-bdr:   var(--fail-bdr);
+  --green:     var(--pass);
+  --green-bg:  var(--pass-bg);
+  --green-bdr: var(--pass-bdr);
+  --amber:     var(--warn);
+  --amber-bg:  var(--warn-bg);
+  --fH: 'Khmer OS Muol Light','Moul','Kantumruy Pro',sans-serif;
+}
+html, body { width: 100%; overflow-x: hidden; }
+body {
+  font-family: 'Kantumruy Pro','Outfit', sans-serif;
+  background: var(--bg);
+  background-image:
+    radial-gradient(ellipse 90% 50% at 50% -5%, rgba(46,168,163,0.15) 0%, transparent 60%),
+    linear-gradient(180deg, #e8eff6 0%, #edf3f8 100%);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  -webkit-tap-highlight-color: transparent;
+}
+.app-header {
+  background: var(--navy);
+  padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,.3);
+}
+.app-header::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 120% at 100% 50%, rgba(46,168,163,0.22) 0%, transparent 65%),
+              radial-gradient(ellipse 40% 80% at -5% 100%, rgba(244,114,182,0.12) 0%, transparent 55%);
+  pointer-events: none;
+}
+.app-header::after {
+  content: ''; position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(46,168,163,0.13) 1px, transparent 1px);
+  background-size: 20px 20px; pointer-events: none;
+}
+.logo { display: flex; align-items: center; gap: 12px; position: relative; z-index: 1; }
+.logo-mark {
+  width: 40px; height: 40px;
+  background: linear-gradient(135deg, var(--tiffany), #4DC8C2);
+  border-radius: 11px; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 800; color: #fff; flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(46,168,163,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.logo-title { color: #fff; font-size: 14px; font-weight: 400; line-height: 1.3; font-family: var(--fH); }
+.logo-sub { color: rgba(255,255,255,.38); font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; font-family: 'Outfit', sans-serif; }
+.hdr-month {
+  color: var(--tiffany); font-size: 12px; font-weight: 700;
+  background: rgba(46,168,163,.15); border: 1px solid rgba(46,168,163,.35);
+  padding: 6px 13px; border-radius: 20px; white-space: nowrap;
+  position: relative; z-index: 1; font-family: 'Outfit', sans-serif;
+}
+.page { max-width: 520px; margin: 0 auto; padding: 152px 14px 80px; display: flex; flex-direction: column; gap: 16px; }
+@keyframes cardUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.section-card:nth-child(1) { animation: cardUp .4s ease both .05s; }
+.section-card:nth-child(2) { animation: cardUp .4s ease both .12s; }
+.section-card:nth-child(3) { animation: cardUp .4s ease both .19s; }
+.section-card:nth-child(4) { animation: cardUp .4s ease both .26s; }
+.hero-wrap { position: fixed; top: 0; left: 0; right: 0; z-index: 80; pointer-events: none; }
+.hero-incentive {
+  background: linear-gradient(135deg, #1a2744 0%, #1e3250 100%);
+  border-bottom: 1px solid rgba(46,168,163,0.2);
+  padding: 14px 20px 16px; pointer-events: all;
+  position: relative; overflow: hidden; box-shadow: 0 6px 24px rgba(0,0,0,.22);
+}
+.hero-incentive::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--tiffany), var(--pink), var(--tiffany)); }
+.hero-incentive::before { content: '$'; position: absolute; right: -8px; top: -14px; font-size: 120px; font-weight: 900; font-family: 'Outfit', sans-serif; color: white; opacity: .03; line-height: 1; pointer-events: none; user-select: none; }
+.hero-inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.hero-label { font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.45); letter-spacing: .5px; margin-bottom: 4px; font-family: var(--fH); }
+.hero-amount { font-size: 52px; font-weight: 800; color: #4DC8C2; font-family: 'Outfit', sans-serif; line-height: 1; letter-spacing: -2px; text-shadow: 0 0 40px rgba(46,168,163,0.4); }
+.hero-sub { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 5px; }
+.hero-status { flex-shrink: 0; }
+.guide-card { background: #fff; border: 1px solid rgba(46,168,163,0.2); border-radius: var(--radius); overflow: hidden; box-shadow: 0 2px 8px rgba(26,39,68,0.06), 0 8px 24px rgba(26,39,68,0.05); }
+.guide-toggle {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px; background: linear-gradient(135deg, var(--navy), #243560);
+  border: none; cursor: pointer; font-family: 'Kantumruy Pro','Outfit', sans-serif;
+  text-align: left; position: relative; overflow: hidden;
+}
+.guide-toggle::after { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(46,168,163,0.10) 1px, transparent 1px); background-size: 18px 18px; pointer-events: none; }
+.guide-toggle-left { display: flex; align-items: center; gap: 10px; }
+.guide-toggle-title { font-size: 14px; font-weight: 400; color: #fff; font-family: var(--fH); }
+.guide-toggle-sub { font-size: 11px; color: rgba(255,255,255,.55); margin-top: 1px; }
+.guide-arrow { width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform .25s, background .2s; }
+.guide-arrow svg { display: block; transition: transform .25s; }
+.guide-arrow.open { background: var(--tiffany); }
+.guide-arrow.open svg { transform: rotate(180deg); }
+.guide-body { padding: 0 16px 18px; display: none; background: #f8fdfd; }
+.guide-body.open { display: block; }
+.guide-steps { display: flex; flex-direction: column; gap: 0; margin-top: 14px; position: relative; padding-left: 36px; }
+.guide-steps::before { content: ''; position: absolute; left: 12px; top: 8px; bottom: 8px; width: 1.5px; background: linear-gradient(to bottom, var(--tiffany), var(--tiffany-l)); border-radius: 2px; }
+.guide-step { display: flex; align-items: flex-start; gap: 10px; padding: 0 0 18px 0; position: relative; }
+.guide-step:last-child { padding-bottom: 0; }
+.guide-step-num { position: absolute; left: -36px; top: 0; width: 24px; height: 24px; border-radius: 50%; background: var(--tiffany); color: #fff; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 0 3px #fff, 0 0 0 4px #fde68a; z-index: 1; font-family: 'Outfit', sans-serif; }
+.guide-step-en { font-size: 13px; font-weight: 500; color: #111827; line-height: 1.7; padding-top: 3px; }
+.section-card { background: var(--card); border: 1px solid rgba(26,39,68,0.08); border-radius: var(--radius); overflow: hidden; box-shadow: 0 2px 8px rgba(26,39,68,0.06), 0 8px 24px rgba(26,39,68,0.06); }
+.section-head { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; background: #fff; border-left: 4px solid var(--tiffany); }
+.section-head.step-navy  { border-left-color: var(--navy); background: var(--navy-xl); }
+.section-head.step-pink  { border-left-color: var(--pink-d); background: var(--pink-l); }
+.section-head.step-teal  { border-left-color: var(--tiffany); background: var(--tiffany-xl); }
+.section-head.step-amber { border-left-color: var(--warn); background: var(--warn-bg); }
+.section-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--tiffany-l); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.section-icon.navy-icon  { background: rgba(26,39,68,0.08); }
+.section-icon.pink-icon  { background: rgba(219,39,119,0.08); }
+.section-icon.teal-icon  { background: var(--tiffany-l); }
+.section-icon.amber-icon { background: rgba(217,119,6,0.08); }
+.section-head h2 { font-size: 15px; font-weight: 400; color: var(--text); line-height: 1.4; font-family: var(--fH); }
+.section-body { padding: 16px; }
+.field { margin-bottom: 12px; }
+.field:last-child { margin-bottom: 0; }
+.field-label { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+.req-star-inline { color: var(--pink); font-size: 15px; font-weight: 700; line-height: 1; margin-left: 2px; transition: opacity .2s; }
+.field.required.filled .req-star-inline,
+.gate-input-wrap.filled .req-star-inline,
+.week-row.filled .req-star-inline { opacity: 0; pointer-events: none; }
+.field select, .field input[type="text"], .field input[type="number"] {
+  width: 100%; height: 48px; padding: 0 14px; border: 1.5px solid var(--border); border-radius: 10px;
+  font-size: 15px; font-weight: 600; color: var(--text); font-family: 'Kantumruy Pro','Outfit', sans-serif;
+  background: #fff; transition: border-color .15s, box-shadow .15s, background .15s; -webkit-appearance: none; appearance: none;
+}
+.field select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none' viewBox='0 0 20 20'%3E%3Crect width='20' height='20' rx='6' fill='%232EA8A3'/%3E%3Cpath d='M6 8l4 4 4-4' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 24px 24px; padding-right: 46px; }
+.field.required select, .field.required input { border-color: var(--req-border); background: var(--req-bg); }
+.field.required select:focus, .field.required input:focus { outline: none; border-color: var(--pink-d); box-shadow: 0 0 0 3px var(--req-glow); background: #fff; }
+.field.required.filled select, .field.required.filled input { border-color: var(--tiffany); background: #fff; }
+.field.required.filled select:focus, .field.required.filled input:focus { box-shadow: 0 0 0 3px rgba(46,168,163,.15); }
+.field select:focus, .field input:focus { outline: none; border-color: var(--tiffany); box-shadow: 0 0 0 3px rgba(46,168,163,.15); }
+.gates-stack { display: flex; flex-direction: column; gap: 10px; }
+.gate { border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--card); transition: border-color .2s, box-shadow .2s; }
+.gate.pass { border-color: var(--pass); box-shadow: 0 2px 10px rgba(22,163,74,0.10); }
+.gate.fail { border-color: var(--fail); box-shadow: 0 2px 10px rgba(220,38,38,0.10); }
+.gate-top { padding: 9px 14px; background: var(--tiffany-xl); display: flex; align-items: center; justify-content: space-between; }
+.gate.pass .gate-top { background: var(--pass-bg); }
+.gate.fail .gate-top { background: var(--fail-bg); }
+.gate-num { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--tiffany-d); margin-bottom: 2px; }
+.gate.pass .gate-num { color: var(--pass); }
+.gate.fail .gate-num { color: var(--fail); }
+.gate-label { font-size: 14px; font-weight: 400; color: var(--text); line-height: 1.3; font-family: var(--fH); }
+.gate-pass-icon { font-size: 20px; opacity: .2; transition: opacity .2s; flex-shrink: 0; }
+.gate.pass .gate-pass-icon { opacity: 1; }
+.gate.fail .gate-pass-icon { opacity: 1; }
+.gate-body { padding: 12px 14px; }
+.gate-inline-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: end; }
+.gate-target-label { font-size: 11px; color: var(--text3); font-weight: 600; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 3px; }
+.gate-target-val { font-size: 16px; font-weight: 800; color: var(--tiffany-d); font-family: 'Outfit', sans-serif; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gate-input-label { display: flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 3px; }
+.gate-inp { width: 100%; height: 42px; border: 1.5px solid var(--req-border); border-radius: 8px; padding: 0 10px; font-size: 17px; font-weight: 700; font-family: 'Outfit', sans-serif; color: var(--text); text-align: right; background: var(--req-bg); transition: border-color .15s, box-shadow .15s, background .15s; -webkit-appearance: none; appearance: none; }
+.gate-inp:focus { outline: none; border-color: var(--pink-d); box-shadow: 0 0 0 3px var(--req-glow); background: #fff; }
+.gate-inp.filled { border-color: var(--tiffany); background: #fff; }
+.gate-inp.filled:focus { border-color: var(--tiffany-d); box-shadow: 0 0 0 3px rgba(46,168,163,.15); }
+.gate-inp.par-inp { color: var(--pink-d); }
+.gate-status { margin-top: 8px; padding: 7px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; text-align: center; background: var(--soft); color: var(--text3); }
+.gate.pass .gate-status { background: var(--pass-bg); color: var(--pass); font-size: 13px; border: 1px solid var(--pass-bdr); }
+.gate.fail .gate-status { background: var(--fail-bg); color: var(--fail); font-size: 13px; border: 1px solid var(--fail-bdr); }
+.par-input-row { margin-bottom: 12px; }
+.par-either-note { font-size: 11px; font-weight: 600; color: var(--text3); text-align: center; margin-bottom: 10px; }
+.par-either-note strong { color: var(--navy); }
+.par-conditions { display: flex; flex-direction: column; gap: 0; }
+.par-cond { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--soft); border-radius: 10px; border-left: 3px solid var(--border); transition: border-color .2s, background .2s; }
+.par-cond.pass-cond { border-left-color: var(--pass); background: var(--pass-bg); }
+.par-cond.fail-cond { border-left-color: var(--fail); background: var(--fail-bg); }
+.par-cond-left { flex: 1; min-width: 0; }
+.par-cond-label { font-size: 12px; font-weight: 700; color: var(--text); }
+.par-cond-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.par-cond-note { font-size: 11px; color: var(--pink-d); margin-top: 2px; line-height: 1.4; }
+.par-cond-example { font-size: 11px; color: var(--text3); margin-top: 4px; line-height: 1.5; background: var(--soft); border-radius: 6px; padding: 4px 8px; }
+.par-cond-example strong { color: var(--tiffany-d); }
+.par-cond-status { font-size: 11px; font-weight: 700; flex-shrink: 0; color: var(--text3); }
+.par-cond.pass-cond .par-cond-status { color: var(--pass); }
+.par-cond.fail-cond .par-cond-status { color: var(--fail); }
+.par-or-divider { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 800; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; padding: 5px 12px; }
+.par-or-divider::before, .par-or-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.par-target-inp { width: 64px; height: 32px; border: 1.5px solid var(--req-border); border-radius: 7px; background: var(--req-bg); font-size: 13px; font-weight: 700; font-family: 'Outfit', sans-serif; color: var(--pink-d); text-align: center; padding: 0 6px; flex-shrink: 0; -webkit-appearance: none; transition: border-color .15s, background .15s; }
+.par-target-inp:focus { outline: none; border-color: var(--tiffany); background: #fff; box-shadow: 0 0 0 3px rgba(46,168,163,.12); }
+.weeks-list { display: flex; flex-direction: column; margin-bottom: 4px; }
+.week-row { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--border); transition: background .15s; }
+.week-row:last-child { border-bottom: none; }
+.week-badge { width: 40px; height: 40px; border-radius: 50%; background: var(--soft); border: 2px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; transition: background .2s, border-color .2s; }
+.week-row.filled .week-badge { background: linear-gradient(135deg, var(--tiffany-d), #4DC8C2); border-color: var(--tiffany); box-shadow: 0 3px 10px rgba(46,168,163,0.35); }
+.week-badge-num { font-size: 15px; font-weight: 800; color: var(--tiffany-d); line-height: 1; font-family: 'Outfit', sans-serif; }
+.week-row.filled .week-badge-num { color: white; }
+.week-badge-label { font-size: 8px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .5px; margin-top: 1px; font-family: 'Outfit', sans-serif; }
+.week-row.filled .week-badge-label { color: rgba(255,255,255,0.75); }
+.week-center { flex: 1; }
+.week-name { font-size: 14px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 4px; margin-bottom: 2px; }
+.week-cumul-label { font-size: 11px; color: var(--text3); }
+.week-cumul-val { font-size: 11px; font-weight: 700; color: var(--tiffany-d); font-family: 'Outfit', sans-serif; }
+.week-inp { width: 110px; height: 40px; border: 1.5px solid var(--req-border); border-radius: 8px; padding: 0 10px; font-size: 16px; font-weight: 700; font-family: 'Outfit', sans-serif; color: var(--text); text-align: right; background: var(--req-bg); -webkit-appearance: none; transition: border-color .15s, background .15s; flex-shrink: 0; }
+.week-inp:focus { outline: none; border-color: var(--tiffany); background: #fff; box-shadow: 0 0 0 3px rgba(46,168,163,.12); }
+.week-row.filled .week-inp { border-color: var(--tiffany); background: #fff; }
+.track-summary { padding: 14px 0 4px; border-top: 2px solid var(--soft); }
+.ts-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 8px; }
+.ts-total-label { font-size: 11px; font-weight: 400; color: var(--text3); letter-spacing: 0.8px; margin-bottom: 2px; font-family: var(--fH); }
+.ts-total-val { font-size: 32px; font-weight: 800; color: var(--tiffany-d); font-family: 'Outfit', sans-serif; line-height: 1; letter-spacing: -1.5px; }
+.ts-next-group { text-align: right; }
+.ts-next-label { font-size: 11px; color: var(--text3); margin-bottom: 2px; }
+.ts-next-val { font-size: 12px; font-weight: 700; color: var(--pink-d); font-family: 'Outfit', sans-serif; }
+.ts-bar-wrap { background: rgba(26,39,68,0.08); height: 6px; border-radius: 6px; overflow: hidden; margin-bottom: 14px; }
+.ts-bar-fill { height: 100%; border-radius: 6px; background: linear-gradient(90deg, var(--tiffany-d), #4DC8C2); transition: width .4s ease; box-shadow: 0 0 8px rgba(46,168,163,0.4); }
+.tier-bar-wrap { background: transparent; padding: 0; }
+.tier-bar-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.tier-bar-title { font-size: 11px; font-weight: 400; color: var(--text2); letter-spacing: 0.8px; font-family: var(--fH); }
+.tier-steps { display: flex; gap: 4px; align-items: flex-end; overflow-x: auto; padding-bottom: 2px; }
+.tier-step { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 28px; }
+.tier-block { width: 100%; border-radius: 4px; background: var(--soft); transition: background .25s; min-height: 10px; }
+.tier-block.reached { background: var(--tiffany-l); }
+.tier-block.current { background: var(--tiffany); box-shadow: 0 2px 6px rgba(46,168,163,.35); }
+.t-rate { font-size: 12px; color: var(--text3); font-weight: 700; white-space: nowrap; font-family: 'Outfit', sans-serif; }
+.t-min  { font-size: 12px; color: var(--text3); white-space: nowrap; font-family: 'Outfit', sans-serif; }
+.formula-pill { background: #F0FAFA; border: 1px solid var(--tiffany-l); border-radius: 10px; padding: 10px 12px; margin-bottom: 16px; font-size: 11px; font-weight: 600; color: var(--text2); display: flex; flex-wrap: nowrap; gap: 4px; align-items: center; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+.pill { border-radius: 20px; padding: 3px 9px; font-weight: 700; white-space: nowrap; flex-shrink: 0; font-size: 11px; font-family: 'Outfit', sans-serif; }
+.pill-navy { background: var(--tiffany); color: #fff; }
+.pill-red  { background: #FEF2F2; border: 1px solid #FECACA; color: var(--fail); }
+.pill-gray { background: #fff; border: 1px solid var(--border); color: var(--text2); }
+.breakdown-table { display: flex; flex-direction: column; }
+.brk-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 4px; border-bottom: 1px solid var(--border); }
+.brk-row:last-child { border-bottom: none; }
+.brk-label { font-size: 13px; color: var(--text2); }
+.brk-val { font-size: 13px; font-weight: 700; font-family: 'Outfit', sans-serif; color: var(--text); }
+.brk-val.neg  { color: var(--fail); }
+.brk-val.prim { color: var(--tiffany-d); }
+.brk-row.total { padding: 14px 12px; margin-top: 8px; background: linear-gradient(135deg, rgba(46,168,163,0.08), rgba(46,168,163,0.04)); border-radius: 10px; border: 1.5px solid var(--tiffany-l); }
+.brk-row.total .brk-label { font-size: 14px; font-weight: 700; color: var(--tiffany-d); }
+.brk-row.total .brk-val   { font-size: 22px; font-weight: 800; color: var(--tiffany-d); letter-spacing: -0.5px; }
+.ao-tag { background: #f8fafc; border: 1px dashed var(--border); border-radius: 10px; padding: 12px 16px; display: flex; align-items: center; gap: 14px; margin-top: 14px; }
+.ao-tag-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--tiffany-d), #3ec9c3); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.ao-tag-name  { font-size: 15px; font-weight: 400; color: var(--tiffany-d); font-family: var(--fH); }
+.ao-tag-pos   { font-size: 12px; color: var(--tiffany-d); font-weight: 600; margin-top: 2px; }
+.ao-tag-month { font-size: 11px; color: var(--text3); margin-top: 1px; font-family: 'Outfit', sans-serif; }
+.status-eligible   { font-size: 12px; font-weight: 700; padding: 7px 14px; background: var(--pass-bg); color: var(--pass); border-radius: 20px; display: inline-block; border: 1px solid var(--pass-bdr); }
+.status-ineligible { font-size: 12px; font-weight: 700; padding: 7px 14px; background: var(--fail-bg); color: var(--fail); border-radius: 20px; display: inline-block; border: 1px solid var(--fail-bdr); }
+.status-pending    { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.35); display: inline-block; text-align: right; line-height: 1.5; }
+.btn-reset { width: 100%; height: 52px; border: none; border-radius: 14px; background: var(--navy); color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Kantumruy Pro','Outfit', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background .15s, transform .1s; box-shadow: 0 4px 14px rgba(26,39,68,0.25); }
+.btn-reset:active { background: #111c36; transform: scale(0.99); }
+.section-card .pink-bar { height: 0; display: none; }
+.celebrate-banner { display: none; background: linear-gradient(135deg, var(--tiffany-d), #3ec9c3); border-radius: var(--radius); padding: 16px 20px; text-align: center; position: relative; overflow: hidden; margin-bottom: 0; }
+.celebrate-banner.show { display: block; animation: celebIn .4s ease; }
+@keyframes celebIn { from{opacity:0;transform:scale(.97)} to{opacity:1;transform:scale(1)} }
+.celebrate-banner::before { content:'🎉'; position:absolute; left:12px; top:50%; transform:translateY(-50%); font-size:32px; opacity:.3; }
+.celebrate-banner::after  { content:'🎉'; position:absolute; right:12px; top:50%; transform:translateY(-50%); font-size:32px; opacity:.3; }
+.celebrate-title { font-size:16px; font-weight:400; color:#fff; font-family: var(--fH); }
+.celebrate-sub   { font-size:12px; color:rgba(255,255,255,.8); margin-top:3px; }
+.celebrate-amt   { font-size:28px; font-weight:800; color:#fff; letter-spacing:-1px; margin-top:4px; font-family:'Outfit',sans-serif; }
+.plan-pill { background: #F0FAFA; border: 1px solid var(--tiffany-l); border-radius: 10px; padding: 9px 14px; font-size: 12px; font-weight: 600; color: var(--tiffany-d); }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.field-row .field { margin-bottom: 0; }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="logo">
+    <div class="logo-mark">AO</div>
+    <div>
+      <div class="logo-title">មន្ត្រីផ្នែកវាយតម្លៃ — កម្មវិធីគណនាប្រាក់លើកទឹកចិត្ត</div>
+      <div class="logo-sub">ChokChey Finance Plc.</div>
+    </div>
+  </div>
+  <div class="hdr-month" id="hdrMonth">April 2026</div>
+</header>
+
+<div class="hero-wrap">
+  <div class="hero-incentive">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-label">💰 ចំនួនប្រាក់លើកទឹកចិត្តប៉ាន់ស្មាន</div>
+        <div class="hero-amount" id="ibAmount">$0.00</div>
+        <div class="hero-sub">ធ្វើបច្ចុប្បន្នភាពភ្លាមៗ នៅពេលអ្នកបំពេញទិន្នន័យ</div>
+      </div>
+      <div class="hero-status" id="ibStatus"><span class="status-pending">— ជ្រើសរើសតួនាទី —</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <div class="guide-card">
+    <button class="guide-toggle" onclick="toggleGuide(this)">
+      <div class="guide-toggle-left">
+        <span style="font-size:18px;">📋</span>
+        <div>
+          <div class="guide-toggle-title">របៀបប្រើប្រាស់</div>
+          <div class="guide-toggle-sub">ចុចដើម្បីមើលការណែនាំ</div>
+        </div>
+      </div>
+      <span class="guide-arrow" aria-hidden="true">
+        <svg width="10" height="7" viewBox="0 0 10 7" fill="none"><path d="M1 1l4 4 4-4" stroke="rgba(255,255,255,0.8)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+    </button>
+    <div class="guide-body">
+      <div class="guide-steps">
+        <div class="guide-step"><span class="guide-step-num">1</span><div class="guide-step-en">ជ្រើសរើស<strong>ខែ</strong> និង<strong>តួនាទី</strong> (តម្រូវឱ្យបំពេញទាំងពីរ)។ បញ្ចូលឈ្មោះ (ស្រេចចិត្ត) នៅ<em>ជំហានទី ១</em>។</div></div>
+        <div class="guide-step"><span class="guide-step-num">2</span><div class="guide-step-en">បញ្ចូល<strong>ផលប័ត្រកម្ចី</strong>, <strong>គណនីសកម្ម</strong> និង <strong>PAR&gt;30%</strong> នៅ<em>ជំហានទី ២</em>។ ទាំង ៣ លក្ខខណ្ឌត្រូវតែជាប់ ដើម្បីមានសិទ្ធិទទួលប្រាក់លើកទឹកចិត្ត។</div></div>
+        <div class="guide-step"><span class="guide-step-num">3</span><div class="guide-step-en">បញ្ចូល<strong>ការប្រមូលការប្រាក់ &amp; កម្រៃសេវា</strong> ប្រចាំសប្តាហ៍ នៅ<em>ជំហានទី ៣</em>។ ចំនួនប្រមូលកាន់តែខ្ពស់ អត្រាលើកទឹកចិត្តកាន់តែល្អ។</div></div>
+        <div class="guide-step"><span class="guide-step-num">4</span><div class="guide-step-en"><strong>ប្រាក់លើកទឹកចិត្តប៉ាន់ស្មាន</strong> នឹងបង្ហាញភ្លាមៗ នៅផ្នែកខាងលើ នៅពេលអ្នកបំពេញ។</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="pink-bar"></div>
+    <div class="section-head step-navy"><div class="section-icon navy-icon">⚙️</div><div><h2>ជ្រើសរើសតួនាទីដើម្បីចាប់ផ្តើម</h2></div></div>
+    <div class="section-body">
+      <div class="field-row">
+        <div class="field required" id="fieldPos">
+          <div class="field-label">តួនាទី <span class="req-star-inline">*</span></div>
+          <select id="posSel" onchange="applyPos(); markFilled('fieldPos','posSel')">
+            <option value="">— ជ្រើសរើស —</option>
+            <option value="sao">SAO — មន្ត្រីផ្នែកវាយតម្លៃជាន់ខ្ពស់</option>
+            <option value="ao">AO — មន្ត្រីផ្នែកវាយតម្លៃ</option>
+          </select>
+        </div>
+        <div class="field required" id="fieldMonth">
+          <div class="field-label">ខែ <span class="req-star-inline">*</span></div>
+          <select id="monthSel" onchange="onMonth(); markFilled('fieldMonth','monthSel')">
+            <option value="">— ជ្រើសរើសខែ —</option>
+            <option>Jan 2025</option><option>Feb 2025</option><option>Mar 2025</option>
+            <option>Apr 2025</option><option>May 2025</option><option>Jun 2025</option>
+            <option>Jul 2025</option><option>Aug 2025</option><option>Sep 2025</option>
+            <option>Oct 2025</option><option>Nov 2025</option><option>Dec 2025</option>
+            <option>Jan 2026</option><option>Feb 2026</option><option>Mar 2026</option>
+            <option selected>Apr 2026</option><option>May 2026</option><option>Jun 2026</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <div class="field-label">👤 ឈ្មោះ <span style="font-size:11px;font-weight:400;color:var(--text3);text-transform:none;">(ស្រេចចិត្ត)</span></div>
+          <input type="text" id="aoName" placeholder="ឈ្មោះរបស់អ្នក..." oninput="calc()">
+        </div>
+        <div class="field">
+          <div class="field-label">🏢 សាខា <span style="font-size:11px;font-weight:400;color:var(--text3);text-transform:none;">(ស្រេចចិត្ត)</span></div>
+          <input type="text" id="aoBranch" placeholder="ឧ. HQ" oninput="calc()">
+        </div>
+      </div>
+      <div class="plan-pill">📊 <span id="planSummary">ជ្រើសតួនាទីដើម្បីមើលគោលដៅ</span></div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="pink-bar"></div>
+    <div class="section-head step-pink"><div class="section-icon pink-icon">🎯</div><div><h2>សម្រេចលក្ខខណ្ឌទាំង ៣ ដើម្បីទទួលប្រាក់លើកទឹកចិត្ត</h2></div></div>
+    <div class="section-body">
+      <div class="gates-stack">
+        <div class="gate wait" id="g1">
+          <div class="gate-top"><div><div class="gate-num">លក្ខខណ្ឌទី 1</div><div class="gate-label">ផលប័ត្រកម្ចី ≥ គោលដៅ</div></div><span class="gate-pass-icon">✅</span></div>
+          <div class="gate-body">
+            <div class="gate-inline-row">
+              <div><div class="gate-target-label">គោលដៅ</div><div class="gate-target-val" id="g1tgt">—</div></div>
+              <div class="gate-input-wrap"><div class="gate-input-label"><span class="req-star-inline">*</span> ផលប័ត្រកម្ចីសរុប ($)</div><input class="gate-inp" type="text" inputmode="numeric" id="loanOS" placeholder="0" oninput="formatInp(this); markGateInpFilled(this)"></div>
+            </div>
+            <div class="gate-status" id="g1sta">— បញ្ចូលចំនួនផលប័ត្រកម្ចី —</div>
+          </div>
+        </div>
+        <div class="gate wait" id="g2">
+          <div class="gate-top"><div><div class="gate-num">លក្ខខណ្ឌទី 2</div><div class="gate-label">គណនីសកម្ម ≥ គោលដៅ</div></div><span class="gate-pass-icon">✅</span></div>
+          <div class="gate-body">
+            <div class="gate-inline-row">
+              <div><div class="gate-target-label">គោលដៅ</div><div class="gate-target-val" id="g2tgt">—</div></div>
+              <div class="gate-input-wrap"><div class="gate-input-label"><span class="req-star-inline">*</span> គណនីសកម្មសរុប</div><input class="gate-inp" type="text" inputmode="numeric" id="accAct" placeholder="0" oninput="formatInp(this); markGateInpFilled(this)"></div>
+            </div>
+            <div class="gate-status" id="g2sta">— បញ្ចូលចំនួនគណនី —</div>
+          </div>
+        </div>
+        <div class="gate wait" id="g3">
+          <div class="gate-top"><div><div class="gate-num">លក្ខខណ្ឌទី 3</div><div class="gate-label">អត្រា PAR&gt;30</div></div><span class="gate-pass-icon">✅</span></div>
+          <div class="gate-body">
+            <div class="par-input-row"><div class="gate-input-wrap"><div class="gate-input-label"><span class="req-star-inline">*</span> លទ្ធផល PAR&gt;30 (%)</div><input class="gate-inp par-inp" type="number" id="par30" placeholder="0.00" min="0" step="0.01" oninput="calc(); markGateInpFilled(this)"></div></div>
+            <div class="par-either-note">ជាប់ បើ<strong>ណាមួយ</strong>ក្នុង លក្ខខណ្ឌ A ឬ B</div>
+            <div class="par-conditions">
+              <div class="par-cond" id="condA"><div class="par-cond-left"><div class="par-cond-label">A · ≤ 3.00% (ថេរ)</div><div class="par-cond-sub">លទ្ធផល PAR ធៀបនឹង ផែនការ 3%</div></div><div class="par-cond-status" id="condAStatus">—</div></div>
+              <div class="par-or-divider">ឬ</div>
+              <div class="par-cond" id="condB"><div class="par-cond-left"><div class="par-cond-label">B · ≤ ផែនការ PAR&gt;30</div><div class="par-cond-note">📌 មធ្យមភាគ PAR&gt;30 ក្នុង ៣ ខែចុងក្រោយ</div><div class="par-cond-example">ឧ. (4.2% + 3.8% + 4.5%) ÷ 3 = <strong>4.2%</strong></div></div><input class="par-target-inp" type="number" id="parTgt" value="3" min="0" step="0.01" oninput="calc()"><div class="par-cond-status" id="condBStatus">—</div></div>
+            </div>
+            <div class="gate-status" id="g3sta">— បញ្ចូល PAR&gt;30 ខាងលើ —</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="pink-bar"></div>
+    <div class="section-head step-teal"><div class="section-icon teal-icon">📆</div><div><h2>បញ្ចូលការប្រមូលការប្រាក់ &amp; កម្រៃសេវាផ្សេងៗ ប្រចាំសប្តាហ៍</h2></div></div>
+    <div class="section-body">
+      <div class="weeks-list">
+        <div class="week-row" id="wcard1"><div class="week-badge"><div class="week-badge-num">1</div><div class="week-badge-label">WK</div></div><div class="week-center"><div class="week-name">សប្តាហ៍ 1 <span class="req-star-inline">*</span></div><div class="week-cumul-label">សរុបបង្គរ: <span class="week-cumul-val" id="c1">$0</span></div></div><input class="week-inp" type="text" inputmode="numeric" id="w1" placeholder="0" oninput="formatInp(this); markWeekFilled(this,'wcard1')"></div>
+        <div class="week-row" id="wcard2"><div class="week-badge"><div class="week-badge-num">2</div><div class="week-badge-label">WK</div></div><div class="week-center"><div class="week-name">សប្តាហ៍ 2 <span class="req-star-inline">*</span></div><div class="week-cumul-label">សរុបបង្គរ: <span class="week-cumul-val" id="c2">$0</span></div></div><input class="week-inp" type="text" inputmode="numeric" id="w2" placeholder="0" oninput="formatInp(this); markWeekFilled(this,'wcard2')"></div>
+        <div class="week-row" id="wcard3"><div class="week-badge"><div class="week-badge-num">3</div><div class="week-badge-label">WK</div></div><div class="week-center"><div class="week-name">សប្តាហ៍ 3 <span class="req-star-inline">*</span></div><div class="week-cumul-label">សរុបបង្គរ: <span class="week-cumul-val" id="c3">$0</span></div></div><input class="week-inp" type="text" inputmode="numeric" id="w3" placeholder="0" oninput="formatInp(this); markWeekFilled(this,'wcard3')"></div>
+        <div class="week-row" id="wcard4"><div class="week-badge"><div class="week-badge-num">4</div><div class="week-badge-label">WK</div></div><div class="week-center"><div class="week-name">សប្តាហ៍ 4 <span class="req-star-inline">*</span></div><div class="week-cumul-label">សរុបបង្គរ: <span class="week-cumul-val" id="c4">$0</span></div></div><input class="week-inp" type="text" inputmode="numeric" id="w4" placeholder="0" oninput="formatInp(this); markWeekFilled(this,'wcard4')"></div>
+      </div>
+      <div class="track-summary">
+        <div class="ts-top">
+          <div class="ts-total-group"><div class="ts-total-label">ប្រមូលបានសរុប</div><div class="ts-total-val" id="tsTotal">$0</div></div>
+          <div class="ts-next-group"><div class="ts-next-label" id="tsRemLabel">ដើម្បីឈានដល់កម្រិតបន្ទាប់</div><div class="ts-next-val" id="tsRemain">—</div></div>
+        </div>
+        <div class="ts-bar-wrap"><div class="ts-bar-fill" id="tsBar" style="width:0%"></div></div>
+      </div>
+      <div class="tier-bar-wrap">
+        <div class="tier-bar-head"><span class="tier-bar-title">កម្រិតអត្រាលើកទឹកចិត្ត</span><span style="font-size:11px;color:var(--tiffany-d);font-weight:600;">កម្រិតសកម្មបន្លិច</span></div>
+        <div class="tier-steps" id="tierSteps"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="pink-bar"></div>
+    <div class="section-head step-amber"><div class="section-icon amber-icon">🧮</div><div><h2>ពិនិត្យការបែងចែកការគណនាប្រាក់លើកទឹកចិត្ត</h2></div></div>
+    <div class="section-body">
+      <div class="formula-pill">
+        <span class="pill pill-navy">Rate <span id="brkRate">0.00%</span></span>
+        <span>×  [</span>
+        <span class="pill pill-gray">ការប្រាក់ &amp; កម្រៃផ្សេង</span>
+        <span>−</span>
+        <span class="pill pill-red">$600</span>
+        <span>−  (</span>
+        <span class="pill pill-red">0.5% × ផលប័ត្រ O/S</span>
+        <span>)  ]</span>
+      </div>
+      <div class="breakdown-table">
+        <div class="brk-row"><span class="brk-label">ការប្រាក់ &amp; កម្រៃផ្សេង ប្រមូលបាន</span><span class="brk-val" id="brkIntFee">$0</span></div>
+        <div class="brk-row"><span class="brk-label">− ថ្លៃប្រតិបត្តិការ (OPEX)</span><span class="brk-val neg">−$600</span></div>
+        <div class="brk-row"><span class="brk-label">− 0.5% × ផលប័ត្រកម្ចីសរុប O/S</span><span class="brk-val neg" id="brkLoanDeduct">—</span></div>
+        <div class="brk-row total"><span class="brk-label">ប្រាក់ប្រមូលបានសុទ្ធ</span><span class="brk-val prim" id="brkBase">$0</span></div>
+        <div class="brk-row"><span class="brk-label">អត្រាប្រាក់លើកទឹកចិត្ត <span style="background:var(--tiffany-l);color:var(--tiffany-d);font-size:11px;font-weight:700;padding:2px 7px;border-radius:20px;margin-left:6px;" id="brkTierNo">—</span></span><span class="brk-val" id="brkRateVal">0.00%</span></div>
+        <div class="brk-row" style="padding:16px 12px;background:linear-gradient(135deg,var(--navy),#243560);border-radius:12px;margin-top:8px;border:none;">
+          <span class="brk-label" style="font-size:14px;font-weight:400;color:rgba(255,255,255,0.75);font-family:var(--fH);">💰 ចំនួនប្រាក់លើកទឹកចិត្តប៉ាន់ស្មាន</span>
+          <span class="brk-val prim" style="font-size:30px;font-weight:800;color:#4DC8C2;letter-spacing:-1px;font-family:'Outfit',sans-serif;" id="brkResult">$0.00</span>
+        </div>
+      </div>
+      <div class="celebrate-banner" id="celebBanner">
+        <div class="celebrate-title">🎉 អបអរសាទរ!</div>
+        <div class="celebrate-sub">លក្ខខណ្ឌទាំង ៣ ជាប់ — ទទួលបានប្រាក់លើកទឹកចិត្ត!</div>
+        <div class="celebrate-amt" id="celebAmt">$0.00</div>
+      </div>
+      <div class="ao-tag">
+        <div class="ao-tag-avatar">👤</div>
+        <div><div class="ao-tag-name" id="tagName">—</div><div class="ao-tag-pos" id="tagPos">—</div><div class="ao-tag-month" id="tagMonth">April 2026</div></div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-reset" onclick="resetAll()">🔄 កំណត់ឡើងវិញ</button>
+
+</div>
+
+<script>
+const POS = {
+  sao: { label:'មន្ត្រីផ្នែកវាយតម្លៃជាន់ខ្ពស់ (SAO)', loanTgt:500000, accTgt:25 },
+  ao:  { label:'មន្ត្រីផ្នែកវាយតម្លៃ (AO)',           loanTgt:400000, accTgt:22 },
+};
+const GRID = [
+  { no:1, label:'≥$2k',  min:2000,  rate:0.0050 },
+  { no:2, label:'≥$3k',  min:3000,  rate:0.0075 },
+  { no:3, label:'≥$6k',  min:6000,  rate:0.0100 },
+  { no:4, label:'≥$8k',  min:8000,  rate:0.0125 },
+  { no:5, label:'≥$10k', min:10000, rate:0.0150 },
+  { no:6, label:'≥$12k', min:12000, rate:0.0175 },
+  { no:7, label:'≥$14k', min:14000, rate:0.0200 },
+  { no:8, label:'≥$16k', min:16000, rate:0.0225 },
+  { no:9, label:'>$20k', min:20000, rate:0.0250 },
+];
+const $  = id => document.getElementById(id);
+const f$ = v  => '$' + (+v).toLocaleString('en-US', {maximumFractionDigits:0});
+const fd = v  => '$' + (+v).toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2});
+const fp = v  => (+v).toFixed(2)+'%';
+const fn = v  => (+v).toLocaleString('en-US');
+const nv = id => parseFloat($(id).value.replace(/,/g,'')) || 0;
+
+function markFilled(fieldId, inputId) {
+  const val = $(inputId).value, el = $(fieldId);
+  if (val && val !== '') el.classList.add('filled'); else el.classList.remove('filled');
+}
+function markGateInpFilled(inp) {
+  const val = inp.value.replace(/,/g,''), filled = !!(val && parseFloat(val) > 0);
+  filled ? inp.classList.add('filled') : inp.classList.remove('filled');
+  const wrap = inp.closest('.gate-input-wrap') || inp.parentElement;
+  if (wrap) filled ? wrap.classList.add('filled') : wrap.classList.remove('filled');
+}
+function markWeekFilled(inp, cardId) {
+  const val = inp.value.replace(/,/g,''), card = $(cardId);
+  if (val && parseFloat(val) > 0) card.classList.add('filled'); else card.classList.remove('filled');
+}
+function toggleGuide(btn) {
+  const body = btn.nextElementSibling, arrow = btn.querySelector('.guide-arrow');
+  const open = body.classList.toggle('open');
+  arrow.classList.toggle('open', open);
+  const path = arrow.querySelector('path');
+  if (path) path.setAttribute('stroke', 'rgba(255,255,255,0.8)');
+}
+function formatInp(el) {
+  const raw = el.value.replace(/,/g,'');
+  if (raw===''||isNaN(raw)) { calc(); return; }
+  const cursor = el.selectionStart, oldLen = el.value.length;
+  el.value = (+raw).toLocaleString('en-US');
+  el.selectionStart = el.selectionEnd = cursor + (el.value.length - oldLen);
+  calc();
+}
+function tierIdx(v) { for (let i=GRID.length-1;i>=0;i--) if(v>=GRID[i].min) return i; return -1; }
+function buildTierSteps(activeIdx) {
+  const wrap = $('tierSteps'); wrap.innerHTML = '';
+  const heights = [14,18,22,28,34,40,46,52,58];
+  GRID.forEach((g,i) => {
+    const div = document.createElement('div'); div.className = 'tier-step';
+    const reached = activeIdx>=0 && i<=activeIdx, isCurrent = i===activeIdx;
+    div.innerHTML = `<div class="tier-block ${isCurrent?'current':reached?'reached':''}" style="height:${heights[i]}px"></div><div class="t-rate">${(g.rate*100).toFixed(2)}%</div><div class="t-min">${g.label}</div>`;
+    wrap.appendChild(div);
+  });
+}
+function setGate(id, state, msg) { $(id).className = 'gate ' + state; $(id+'sta').textContent = msg; }
+function applyPos() {
+  const key = $('posSel').value, pos = POS[key];
+  if (pos) {
+    $('g1tgt').textContent = f$(pos.loanTgt);
+    $('g2tgt').textContent = fn(pos.accTgt) + ' គណនី';
+    $('planSummary').textContent = 'ផលប័ត្រ ≥ ' + f$(pos.loanTgt) + ' · គណនីសកម្ម ≥ ' + fn(pos.accTgt) + ' · PAR>30 ≤ 3%';
+  } else {
+    $('g1tgt').textContent = '— ជ្រើសតួនាទីជាមុន';
+    $('g2tgt').textContent = '— ជ្រើសតួនាទីជាមុន';
+    $('planSummary').textContent = 'ជ្រើសតួនាទីដើម្បីមើលគោលដៅ';
+  }
+  calc();
+}
+function onMonth() { const m = $('monthSel').value; $('hdrMonth').textContent = m; $('tagMonth').textContent = m; calc(); }
+function calc() {
+  const key = $('posSel').value, hasPOS = !!key, pos = POS[key] || {};
+  const loanOS = nv('loanOS'), accAct = nv('accAct'), par = nv('par30');
+  const parTgt = parseFloat($('parTgt').value) || 3;
+  const loanTgt = pos.loanTgt || 0, accTgt = pos.accTgt || 0;
+  const weeks = [1,2,3,4].map(i=>nv('w'+i));
+  let run=0; const cumuls = weeks.map(w=>{run+=w;return run;}); const total = cumuls[3];
+  [1,2,3,4].forEach((w,i)=>{ $('c'+w).textContent = f$(cumuls[i]); });
+  const ti = tierIdx(total), next = ti < GRID.length-1 ? GRID[ti+1] : (ti===-1 ? GRID[0] : null);
+  const pctBar = next ? Math.min(100,(total/next.min)*100) : 100;
+  $('tsBar').style.width = pctBar+'%'; $('tsTotal').textContent = f$(total);
+  if (ti===-1) { $('tsRemLabel').textContent = 'ដើម្បីឈានដល់កម្រិត 1 (0.50%)'; $('tsRemain').textContent = f$(2000-total)+' ត្រូវការ'; }
+  else if (next) { $('tsRemLabel').textContent = 'ដើម្បីឈានដល់កម្រិត '+(ti+2)+' ('+(GRID[ti+1].rate*100).toFixed(2)+'%)'; $('tsRemain').textContent = f$(Math.max(0,next.min-total))+' ទៀត'; }
+  else { $('tsRemLabel').textContent = 'ស្ថានភាព'; $('tsRemain').textContent = '🎉 ដល់កម្រិតអតិបរមា!'; }
+  buildTierSteps(ti);
+  const loanOK = hasPOS && loanOS >= loanTgt, accOK = hasPOS && accAct >= accTgt;
+  const parCondA = par <= 3.0, parCondB = par <= parTgt, parOK = parCondA || parCondB;
+  const elig = loanOK && accOK && parOK;
+  const deductAdmin = 600, deductLoan = loanOS * 0.005;
+  const base = Math.max(0, total - deductAdmin - deductLoan);
+  const activeRate = (ti>=0) ? GRID[ti].rate : 0;
+  const incentive = (elig && ti>=0) ? base * activeRate : 0;
+  if (!hasPOS)     setGate('g1','wait','— ជ្រើសតួនាទីជាមុន —');
+  else if (loanOK) setGate('g1','pass','✅ ជាប់ — '+f$(loanOS)+' ≥ '+f$(loanTgt));
+  else             setGate('g1','fail','❌ មិនជាប់ — ខ្វះ '+f$(loanTgt-loanOS));
+  if (!hasPOS)    setGate('g2','wait','— ជ្រើសតួនាទីជាមុន —');
+  else if (accOK) setGate('g2','pass','✅ ជាប់ — '+fn(accAct)+' ≥ '+fn(accTgt)+' គណនី');
+  else            setGate('g2','fail','❌ មិនជាប់ — ត្រូវការ '+(accTgt-accAct)+' គណនីទៀត');
+  if (parOK) { const via = parCondA ? 'តាម A — ≤ 3.00%' : 'តាម B — ≤ មធ្យម '+fp(parTgt); setGate('g3','pass','✅ ជាប់ — '+via); }
+  else setGate('g3','fail','❌ មិនជាប់ — PAR '+fp(par)+' លើសលក្ខខណ្ឌទាំងពីរ');
+  const noEntry = par===0 && !$('par30').value;
+  const cA = $('condA'), cB = $('condB');
+  cA.className = 'par-cond' + (noEntry?'':parCondA?' pass-cond':' fail-cond');
+  $('condAStatus').textContent = noEntry?'—':parCondA?'✅ ជាប់':'❌ មិនជាប់';
+  cB.className = 'par-cond' + (noEntry?'':parCondB?' pass-cond':' fail-cond');
+  $('condBStatus').textContent = noEntry?'—':parCondB?'✅ ជាប់':'❌ មិនជាប់';
+  $('brkIntFee').textContent     = f$(total);
+  $('brkLoanDeduct').textContent = deductLoan>0 ? '−'+f$(deductLoan) : '—';
+  $('brkBase').textContent       = f$(base);
+  $('brkTierNo').textContent     = ti>=0 ? 'កម្រិត '+GRID[ti].no : '—';
+  $('brkRate').textContent       = ti>=0 ? (GRID[ti].rate*100).toFixed(2)+'%' : '0.00%';
+  $('brkRateVal').textContent    = ti>=0 ? (GRID[ti].rate*100).toFixed(2)+'%' : '0.00%';
+  $('brkResult').textContent     = fd(elig && ti>=0 ? incentive : 0);
+  $('ibAmount').textContent = fd(incentive);
+  const ibSta = $('ibStatus');
+  if (!hasPOS) ibSta.innerHTML = '<span class="status-pending">— ជ្រើសតួនាទីដើម្បីចាប់ផ្តើម —</span>';
+  else if (elig && ti >= 0) ibSta.innerHTML = '<span class="status-eligible">✅ មានសិទ្ធ</span>';
+  else if (!loanOS && !accAct && !nv('par30') && total === 0) ibSta.innerHTML = '<span class="status-pending">— បញ្ចូលទិន្នន័យដើម្បីចាប់ផ្តើម —</span>';
+  else ibSta.innerHTML = '<span class="status-ineligible">❌ គ្មានសិទ្ធ</span>';
+  $('tagName').textContent = $('aoName').value || '—';
+  $('tagPos').textContent  = hasPOS ? pos.label : '—';
+  const cb = $('celebBanner');
+  if (elig && ti >= 0) { cb.classList.add('show'); $('celebAmt').textContent = fd(incentive); }
+  else cb.classList.remove('show');
+}
+function resetAll() {
+  $('posSel').value = ''; $('aoName').value = '';
+  ['loanOS','accAct','par30','w1','w2','w3','w4'].forEach(id=>{ $(id).value=''; });
+  $('parTgt').value = 3;
+  $('g1tgt').textContent = '— ជ្រើសតួនាទីជាមុន';
+  $('g2tgt').textContent = '— ជ្រើសតួនាទីជាមុន';
+  ['loanOS','accAct','par30'].forEach(id => {
+    $(id).classList.remove('filled');
+    const wrap = $(id).closest('.gate-input-wrap') || $(id).parentElement;
+    if (wrap) wrap.classList.remove('filled');
+  });
+  ['wcard1','wcard2','wcard3','wcard4'].forEach(id => $(id).classList.remove('filled'));
+  $('fieldPos').classList.remove('filled');
+  applyPos();
+}
+$('fieldMonth').classList.add('filled');
+buildTierSteps(0); onMonth(); calc();
+function adjustOffset() {
+  requestAnimationFrame(function () {
+    const hdr = document.querySelector('.app-header'), hero = document.querySelector('.hero-wrap'), page = document.querySelector('.page');
+    if (!hdr || !hero || !page) return;
+    const hh = hdr.offsetHeight;
+    hero.style.top = hh + 'px';
+    page.style.paddingTop = (hh + hero.offsetHeight + 14) + 'px';
+  });
+}
+adjustOffset();
+document.addEventListener('DOMContentLoaded', adjustOffset);
+window.addEventListener('load', adjustOffset);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(adjustOffset);
+window.addEventListener('resize', adjustOffset);
+</script>
+</body>
+</html>

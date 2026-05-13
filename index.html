@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Incentive Hub | ChokChey Finance</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@300;400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal:     #2EA8A3;
+    --teal-lt:  #4DC8C2;
+    --teal-dk:  #1e7874;
+    --teal-dim: rgba(46,168,163,0.12);
+    --navy:     #1a2744;
+    --navy-lt:  #2d3f6b;
+    --pink:     #F472B6;
+    --pink-dk:  #d9559e;
+    --pink-dim: rgba(244,114,182,0.12);
+    --white:    #ffffff;
+    --bg:       #f0f4f8;
+    --card-bg:  #ffffff;
+    --muted:    #7a8baa;
+    --border:   rgba(46,168,163,0.15);
+    --shadow:   0 4px 20px rgba(26,39,68,0.08);
+    --r:        18px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: #e8eef5;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(46,168,163,0.10) 0%, transparent 70%),
+      linear-gradient(180deg, #e8eef5 0%, #edf2f7 100%);
+    color: var(--navy);
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ══ HEADER ══ */
+  .header {
+    background: var(--navy);
+    padding: 0 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 120% at 100% 50%, rgba(46,168,163,0.22) 0%, transparent 65%),
+      radial-gradient(ellipse 50% 80% at -10% 100%, rgba(244,114,182,0.14) 0%, transparent 55%);
+    pointer-events: none;
+  }
+  .header-dots {
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(46,168,163,0.12) 1px, transparent 1px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+  .header-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 28px 0 24px;
+  }
+  .logo-mark {
+    width: 48px; height: 48px;
+    background: linear-gradient(135deg, var(--teal), var(--teal-lt));
+    border-radius: 13px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 6px 20px rgba(46,168,163,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
+    font-weight: 800;
+    font-size: 16px;
+    color: white;
+    letter-spacing: -1px;
+    font-family: 'Outfit', sans-serif;
+  }
+  .header-words {}
+  .brand-line {
+    font-family: 'Noto Sans Khmer', sans-serif;
+    font-size: 10px;
+    font-weight: 300;
+    color: var(--teal-lt);
+    letter-spacing: 0.1em;
+    margin-bottom: 3px;
+  }
+  .page-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+    line-height: 1.1;
+    letter-spacing: -0.3px;
+  }
+  .page-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.42);
+    margin-top: 3px;
+    font-weight: 300;
+  }
+
+  /* ══ TAB STRIP ══ */
+  .tab-strip {
+    display: flex;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    position: relative;
+  }
+  .tab {
+    flex: 1;
+    padding: 13px 0 11px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-align: center;
+    color: rgba(255,255,255,0.35);
+    cursor: pointer;
+    transition: color .2s;
+    position: relative;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tab.active { color: var(--teal-lt); }
+  .tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 10%; right: 10%;
+    height: 2px;
+    background: var(--teal-lt);
+    border-radius: 2px 2px 0 0;
+  }
+  .tab .tab-kh {
+    display: block;
+    font-family: 'Noto Sans Khmer', sans-serif;
+    font-size: 9.5px;
+    font-weight: 400;
+    opacity: 0.8;
+    margin-top: 1px;
+  }
+
+  /* ══ BODY ══ */
+  .body { padding: 20px 16px 40px; }
+
+  /* ══ ROLE CARDS ══ */
+  .role-card {
+    background: var(--card-bg);
+    border-radius: var(--r);
+    box-shadow: 0 2px 8px rgba(26,39,68,0.06), 0 8px 28px rgba(26,39,68,0.08);
+    margin-bottom: 14px;
+    overflow: hidden;
+    border: 1.5px solid rgba(26,39,68,0.06);
+    transition: border-color .2s, box-shadow .2s, transform .2s;
+    animation: slideUp .35s ease both;
+  }
+  .role-card:active {
+    transform: scale(0.99);
+  }
+  .role-card:nth-child(1) { animation-delay: .04s; }
+  .role-card:nth-child(2) { animation-delay: .10s; }
+  .role-card:nth-child(3) { animation-delay: .16s; }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-stripe {
+    height: 5px;
+    background: linear-gradient(90deg, var(--teal-dk), var(--teal-lt));
+  }
+  .card-stripe.s-pink { background: linear-gradient(90deg, var(--pink-dk), var(--pink)); }
+  .card-stripe.s-navy { background: linear-gradient(90deg, var(--navy), var(--navy-lt)); }
+
+  .card-top {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 20px 18px 16px;
+  }
+  .role-icon {
+    width: 60px; height: 60px;
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    letter-spacing: -1px;
+    flex-shrink: 0;
+  }
+  .ri-teal {
+    background: linear-gradient(135deg, var(--teal-dk), var(--teal));
+    color: white;
+    box-shadow: 0 4px 14px rgba(46,168,163,0.4);
+  }
+  .ri-pink {
+    background: linear-gradient(135deg, var(--pink-dk), var(--pink));
+    color: white;
+    box-shadow: 0 4px 14px rgba(244,114,182,0.4);
+  }
+  .ri-navy {
+    background: linear-gradient(135deg, var(--navy), var(--navy-lt));
+    color: white;
+    box-shadow: 0 4px 14px rgba(26,39,68,0.35);
+  }
+
+  .role-meta { flex: 1; min-width: 0; }
+
+  .co-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    background: rgba(244,114,182,0.12);
+    color: var(--pink-dk);
+    border-radius: 4px;
+    padding: 2px 7px;
+    margin-top: 4px;
+  }
+
+  .role-name-en {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.2;
+  }
+  .role-name-kh {
+    font-family: 'Noto Sans Khmer', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+
+  /* ══ CTA BUTTONS ══ */
+  .card-ctas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-top: 1px solid rgba(26,39,68,0.06);
+  }
+  .cta-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 16px 10px;
+    text-decoration: none;
+    transition: background .15s;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 68px;
+    position: relative;
+  }
+  .cta-btn:first-child {
+    border-right: 1px solid rgba(26,39,68,0.06);
+  }
+  .cta-btn:active { filter: brightness(0.94); }
+
+  .cta-icon { font-size: 18px; line-height: 1; }
+  .cta-label-en {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+  .cta-label-kh {
+    font-family: 'Noto Sans Khmer', sans-serif;
+    font-size: 10.5px;
+    font-weight: 400;
+    margin-top: 1px;
+  }
+
+  /* teal variant */
+  .btn-teal-fill { background: rgba(46,168,163,0.07); }
+  .btn-teal-fill .cta-label-en { color: var(--teal-dk); }
+  .btn-teal-fill .cta-label-kh { color: var(--teal); }
+  .btn-teal-fill:hover { background: rgba(46,168,163,0.14); }
+
+  .btn-teal-solid { background: var(--teal); }
+  .btn-teal-solid .cta-label-en { color: white; }
+  .btn-teal-solid .cta-label-kh { color: rgba(255,255,255,0.75); }
+  .btn-teal-solid:hover { background: var(--teal-dk); }
+
+  /* pink variant */
+  .btn-pink-fill { background: rgba(244,114,182,0.07); }
+  .btn-pink-fill .cta-label-en { color: var(--pink-dk); }
+  .btn-pink-fill .cta-label-kh { color: var(--pink-dk); }
+  .btn-pink-fill:hover { background: rgba(244,114,182,0.14); }
+
+  .btn-pink-solid { background: var(--pink-dk); }
+  .btn-pink-solid .cta-label-en { color: white; }
+  .btn-pink-solid .cta-label-kh { color: rgba(255,255,255,0.75); }
+  .btn-pink-solid:hover { background: #c0458c; }
+
+  /* navy variant */
+  .btn-navy-fill { background: rgba(26,39,68,0.05); }
+  .btn-navy-fill .cta-label-en { color: var(--navy); }
+  .btn-navy-fill .cta-label-kh { color: var(--navy-lt); }
+  .btn-navy-fill:hover { background: rgba(26,39,68,0.10); }
+
+  .btn-navy-solid { background: var(--navy); }
+  .btn-navy-solid .cta-label-en { color: white; }
+  .btn-navy-solid .cta-label-kh { color: rgba(255,255,255,0.65); }
+  .btn-navy-solid:hover { background: #111c36; }
+
+  /* ══ INSTRUCTION BOX ══ */
+  .instruction-box {
+    background: white;
+    border-left: 3px solid var(--teal);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 28px;
+    box-shadow: var(--shadow);
+  }
+  .inst-en {
+    font-size: 13px;
+    color: var(--navy);
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+  .inst-kh {
+    font-family: 'Noto Sans Khmer', sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .inst-en strong, .inst-kh strong {
+    color: var(--teal-dk);
+    font-weight: 700;
+  }
+
+
+  .divider {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 20px 2px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(26,39,68,0.10);
+  }
+
+  /* ══ INFO PILL ══ */
+  .info-pill {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+    box-shadow: var(--shadow);
+  }
+  .info-pill .i { font-size: 16px; flex-shrink: 0; }
+  .info-pill strong { color: var(--navy); }
+
+  .version-stamp {
+    text-align: center;
+    font-size: 10.5px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    margin-top: 24px;
+    opacity: 0.6;
+  }
+
+
+  @media (min-width: 600px) {
+    .body { padding: 28px 28px 60px; max-width: 640px; margin: 0 auto; }
+    .header { padding: 0 28px; }
+    .page-title { font-size: 24px; }
+    .role-name-en { font-size: 17px; }
+  }
+  @media (min-width: 900px) {
+    .body { max-width: 860px; }
+    .roles-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .roles-grid .role-card { margin-bottom: 0; }
+    .roles-grid .role-card:last-child {
+      grid-column: 1 / -1;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-dots"></div>
+  <div class="header-inner">
+    <div class="logo-mark">CC</div>
+    <div class="header-words">
+      <div class="brand-line">ChokChey Finance Plc.</div>
+      <div class="page-title">Incentive Simulator</div>
+
+    </div>
+  </div>
+
+</header>
+
+<!-- BODY -->
+<main class="body">
+  <div class="instruction-box">
+    <div class="inst-en">Select your role below, then tap <strong>EN</strong> or <strong>ខ្មែរ</strong> to open the simulator.</div>
+    <div class="inst-kh">សូមជ្រើសរើសតួនាទីរបស់អ្នក រួចចុច <strong>EN</strong> ឬ <strong>ខ្មែរ</strong> ដើម្បីបើកកម្មវិធីគណនា។</div>
+  </div>
+
+  <div class="roles-grid">
+
+    <!-- ── DISBURSEMENT OFFICER ── -->
+    <div class="role-card">
+      <div class="card-stripe s-pink"></div>
+      <div class="card-top">
+        <div class="role-icon ri-pink">DO</div>
+        <div class="role-meta">
+          <div class="role-name-en">Disbursement Officer</div>
+          <div class="role-name-kh">មន្ត្រីឥណទាន</div>
+
+        </div>
+      </div>
+      <div class="card-ctas">
+        <a class="cta-btn btn-pink-fill" href="2.Disbursement_CO_Incentive_Simulator_v4.html" target="_blank">
+          <span class="cta-icon">🌐</span>
+          <span class="cta-label-en">EN</span>
+        </a>
+        <a class="cta-btn btn-pink-solid" href="2.DO_Incentive_Simulator_KH.html" target="_blank">
+          <span class="cta-icon">🇰🇭</span>
+          <span class="cta-label-en">ខ្មែរ</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- ── SALE OFFICER ── -->
+    <div class="role-card">
+      <div class="card-stripe"></div>
+      <div class="card-top">
+        <div class="role-icon ri-teal">SO</div>
+        <div class="role-meta">
+          <div class="role-name-en">Sale Officer</div>
+          <div class="role-name-kh">មន្ត្រីផ្នែកលក់</div>
+        </div>
+      </div>
+      <div class="card-ctas">
+        <a class="cta-btn btn-teal-fill" href="3.Sale_Office_Incentive_Simulator_v3 1.html" target="_blank">
+          <span class="cta-icon">🌐</span>
+          <span class="cta-label-en">EN</span>
+        </a>
+        <a class="cta-btn btn-teal-solid" href="3.Sale_Office_Incentive_Simulator_KH.html" target="_blank">
+          <span class="cta-icon">🇰🇭</span>
+          <span class="cta-label-en">ខ្មែរ</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- ── ASSESSMENT OFFICER ── -->
+    <div class="role-card">
+      <div class="card-stripe s-navy"></div>
+      <div class="card-top">
+        <div class="role-icon ri-navy">AO</div>
+        <div class="role-meta">
+          <div class="role-name-en">Assessment Officer</div>
+          <div class="role-name-kh">មន្ត្រីផ្នែកវាយតម្លៃ</div>
+        </div>
+      </div>
+      <div class="card-ctas">
+        <a class="cta-btn btn-navy-fill" href="4.AO_Incentive_Simulator_v4 (1).html" target="_blank">
+          <span class="cta-icon">🌐</span>
+          <span class="cta-label-en">EN</span>
+        </a>
+        <a class="cta-btn btn-navy-solid" href="4.AO_Incentive_Simulator_KH_v2 (1).html" target="_blank">
+          <span class="cta-icon">🇰🇭</span>
+          <span class="cta-label-en">ខ្មែរ</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="version-stamp">v2.0 · May 2026 · For internal testing only</div>
+
+</main>
+
+</body>
+</html>

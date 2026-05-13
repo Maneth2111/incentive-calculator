@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Sale Office Incentive Simulator — ChokChey Finance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --tiffany:#2EA8A3;--tiffany-d:#259F9A;--tiffany-l:#CCF0EE;
+  --navy:#1a2744;--pink:#F472B6;--pink-l:#fce7f3;--pink-d:#db2777;
+  --green:#15803D;--green-bg:#DCFCE7;--red:#B91C1C;--red-bg:#FEE2E2;
+  --amber:#D97706;--amber-bg:#FEF3C7;
+  --bg:#EFF5F5;--card:#ffffff;--border:#E2E8E8;
+  --text:#111827;--text2:#6B7280;--text3:#9CA3AF;--soft:#F3F4F6;
+  --radius:10px;--req-border:#F472B6;--req-glow:rgba(244,114,182,0.18);--req-bg:#fff8fc;
+}
+html,body{width:100%;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;-webkit-tap-highlight-color:transparent}
+.app-header{background:var(--navy);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:fixed;top:0;left:0;right:0;z-index:100;box-shadow:0 1px 0 rgba(255,255,255,.06),0 4px 16px rgba(0,0,0,.25)}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:34px;height:34px;background:var(--tiffany);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;letter-spacing:.5px}
+.logo-title{color:#fff;font-size:13px;font-weight:700;line-height:1.25;letter-spacing:-.1px}
+.logo-sub{color:rgba(255,255,255,.38);font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-top:1px}
+.hdr-month{color:var(--tiffany);font-size:12px;font-weight:700;background:rgba(46,168,163,.12);border:1px solid rgba(46,168,163,.3);padding:5px 12px;border-radius:20px;white-space:nowrap}
+.page{max-width:520px;margin:0 auto;padding:152px 12px 80px;display:flex;flex-direction:column;gap:10px}
+.hero-wrap{position:fixed;top:0;left:0;right:0;z-index:80;pointer-events:none}
+.hero-incentive{background:#fff;border-bottom:1px solid #e8f5f5;padding:10px 18px 12px;pointer-events:all;position:relative;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.hero-incentive::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--tiffany),var(--pink),var(--tiffany))}
+.hero-incentive::before{content:'$';position:absolute;right:-8px;top:-10px;font-size:110px;font-weight:900;color:var(--tiffany);opacity:.04;line-height:1;pointer-events:none;user-select:none}
+.hero-inner{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.hero-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1.6px;margin-bottom:3px}
+.hero-amount{font-size:38px;font-weight:800;color:var(--tiffany-d);line-height:1;letter-spacing:-1px}
+.hero-sub{font-size:10px;color:var(--text3);margin-top:4px}
+.guide-card{background:#fff;border:1px solid var(--tiffany-l);border-radius:var(--radius);overflow:hidden}
+.guide-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--navy);border:none;cursor:pointer;font-family:'Inter',sans-serif;text-align:left}
+.guide-toggle-left{display:flex;align-items:center;gap:10px}
+.guide-toggle-title{font-size:13px;font-weight:700;color:#fff}
+.guide-toggle-sub{font-size:11px;color:rgba(255,255,255,.55);margin-top:1px}
+.guide-arrow{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .25s,background .2s}
+.guide-arrow svg{display:block;transition:transform .25s}
+.guide-arrow.open{background:var(--tiffany)}
+.guide-arrow.open svg{transform:rotate(180deg)}
+.guide-body{padding:0 14px 14px;display:none;background:#f8fdfd}
+.guide-body.open{display:block}
+.guide-steps{display:flex;flex-direction:column;margin-top:14px;position:relative;padding-left:36px}
+.guide-steps::before{content:'';position:absolute;left:12px;top:8px;bottom:8px;width:1.5px;background:linear-gradient(to bottom,var(--tiffany),var(--tiffany-l));border-radius:2px}
+.guide-step{display:flex;align-items:flex-start;padding:0 0 18px;position:relative}
+.guide-step:last-child{padding-bottom:0}
+.guide-step-num{position:absolute;left:-36px;top:0;width:24px;height:24px;border-radius:50%;background:var(--tiffany);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px #f8fdfd,0 0 0 4px var(--tiffany-l);z-index:1}
+.guide-step-en{font-size:13px;font-weight:500;color:#111827;line-height:1.5;padding-top:3px}
+.section-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.section-head{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px;background:#fff;border-left:4px solid var(--tiffany)}
+.section-icon{width:34px;height:34px;border-radius:8px;background:var(--tiffany-l);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.section-head h2{font-size:15px;font-weight:800;color:var(--text);letter-spacing:-.2px}
+.section-body{padding:12px}
+.field{margin-bottom:12px}
+.field:last-child{margin-bottom:0}
+.field-label{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.req-star-inline{color:var(--pink);font-size:15px;font-weight:700;line-height:1;margin-left:2px;transition:opacity .2s}
+.field.required.filled .req-star-inline{opacity:0;pointer-events:none}
+.field select,.field input[type="text"],.field input[type="number"]{width:100%;height:48px;padding:0 14px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;font-weight:600;color:var(--text);font-family:'Inter',sans-serif;background:#fff;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none;appearance:none}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none' viewBox='0 0 20 20'%3E%3Crect width='20' height='20' rx='6' fill='%232EA8A3'/%3E%3Cpath d='M6 8l4 4 4-4' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:24px;padding-right:46px}
+.field.required select,.field.required input{border-color:var(--req-border);background:var(--req-bg)}
+.field.required select:focus,.field.required input:focus{outline:none;border-color:var(--pink-d);box-shadow:0 0 0 3px var(--req-glow);background:#fff}
+.field.required select:focus-visible,.field.required input:focus-visible{outline:2px solid var(--pink-d);outline-offset:2px}
+.field.required.filled select,.field.required.filled input{border-color:var(--tiffany);background:#fff}
+.field select:focus,.field input:focus{outline:none;border-color:var(--tiffany);box-shadow:0 0 0 3px rgba(46,168,163,.15)}
+.field select:focus-visible,.field input:focus-visible{outline:2px solid var(--tiffany);outline-offset:2px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.field-row .field{margin-bottom:0}
+.plan-pill{background:#F0FAFA;border:1px solid var(--tiffany-l);border-radius:10px;padding:9px 14px;font-size:12px;font-weight:600;color:var(--tiffany-d)}
+/* Loan cards */
+.loan-list{display:flex;flex-direction:column;gap:8px}
+.loan-card{border:1.5px solid var(--border);border-radius:10px;overflow:hidden;background:var(--card);transition:border-color .2s}
+.loan-card.has-data{border-color:var(--tiffany)}
+.loan-card-header{display:flex;align-items:center;gap:10px;padding:11px 12px;cursor:pointer;background:var(--card);user-select:none;-webkit-tap-highlight-color:transparent}
+.loan-card.has-data .loan-card-header{background:#F0FAFA}
+.loan-num-badge{width:28px;height:28px;border-radius:8px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--text3);flex-shrink:0;transition:background .2s,color .2s}
+.loan-card.has-data .loan-num-badge{background:var(--tiffany);color:#fff}
+.loan-card-summary{flex:1;min-width:0}
+.loan-card-main{font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.loan-card-sub{font-size:11px;color:var(--text3);margin-top:1px}
+.loan-card.has-data .loan-card-sub{color:var(--tiffany-d);font-weight:600}
+.loan-card-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.loan-irr-badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;background:var(--tiffany-l);color:var(--tiffany-d);white-space:nowrap}
+.loan-expand-icon{width:20px;height:20px;border-radius:50%;background:var(--soft);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .2s,background .2s}
+.loan-card.expanded .loan-expand-icon{transform:rotate(180deg);background:var(--tiffany-l)}
+.loan-card-body{display:none;padding:12px;border-top:1px solid var(--border);background:#fff}
+.loan-card.expanded .loan-card-body{display:block}
+.loan-calc-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px;background:#F0FAFA;border-radius:8px;border:1px solid var(--tiffany-l);margin-bottom:10px}
+.loan-calc-label{font-size:10px;font-weight:700;color:var(--tiffany-d);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.loan-calc-val{font-size:18px;font-weight:800;color:var(--tiffany-d);font-feature-settings:'zero' 0;line-height:1}
+.loan-calc-val.empty{color:var(--text3);font-size:13px;font-weight:400}
+.loan-input-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.loan-field{display:flex;flex-direction:column;gap:4px}
+.loan-field-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;display:flex;align-items:center;gap:4px}.tip-icon{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--text3);color:#fff;font-size:9px;font-weight:800;cursor:pointer;flex-shrink:0}#tip-bubble{position:fixed;background:var(--navy);color:#fff;font-size:11px;font-weight:500;padding:7px 10px;border-radius:8px;width:200px;line-height:1.5;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.25);pointer-events:none;display:none;font-family:'Inter',sans-serif}
+.loan-inp{width:100%;height:40px;padding:0 10px;border:1.5px solid var(--req-border);border-radius:8px;font-size:15px;font-weight:600;color:var(--text);font-family:'Inter',sans-serif;background:var(--req-bg);-webkit-appearance:none;appearance:none;transition:border-color .15s,box-shadow .15s,background .15s;text-align:right}
+.loan-inp:focus{outline:none;border-color:var(--pink-d);box-shadow:0 0 0 3px var(--req-glow);background:#fff}
+.loan-inp:focus-visible{outline:2px solid var(--pink-d);outline-offset:2px}
+.loan-inp.filled{border-color:var(--tiffany);background:#fff}
+.loan-inp.filled:focus{border-color:var(--tiffany-d);box-shadow:0 0 0 3px rgba(46,168,163,.15)}
+.loan-req-star{color:var(--pink);font-size:13px;font-weight:800;line-height:1;transition:opacity .2s}.loan-field.filled .loan-req-star{opacity:0}
+.loan-inp.filled~.loan-req-star,.filled .loan-req-star{opacity:0}
+.field-hint{font-size:10px;color:var(--text3);line-height:1.5;padding:5px 8px;background:var(--soft);border-radius:6px;margin-top:2px}
+.field-hint strong{color:var(--text2)}
+
+
+.btn-rm-loan{width:100%;height:36px;border:1.5px dashed #fecaca;border-radius:8px;background:#fff;color:var(--red);font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .15s}
+.btn-rm-loan:active{background:var(--red-bg)}
+.btn-add-loan{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;height:44px;border:1.5px dashed var(--tiffany);border-radius:10px;background:#F0FAFA;color:var(--tiffany-d);font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s}
+.btn-add-loan:active{background:var(--tiffany-l)}
+.loan-count{font-size:10px;color:var(--text3);font-weight:600;text-align:right;margin-top:6px}
+/* Item gates */
+.item-gate{border:1.5px solid var(--border);border-radius:10px;overflow:hidden;background:var(--card);transition:border-color .2s;margin-bottom:10px}
+.item-gate:last-child{margin-bottom:0}
+.item-gate.pass{border-color:var(--green)}
+.item-gate.fail{border-color:var(--red)}
+.item-gate.partial{border-color:var(--amber)}
+.item-gate-top{padding:8px 12px;background:var(--tiffany-l);display:flex;align-items:center;justify-content:space-between}
+.item-gate-num-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--tiffany-d);margin-bottom:2px}
+.item-gate-title{font-size:13px;font-weight:700;color:var(--text)}
+.item-gate-pass-icon{font-size:18px;opacity:.25;transition:opacity .2s}
+.item-gate.pass .item-gate-pass-icon,.item-gate.fail .item-gate-pass-icon,.item-gate.partial .item-gate-pass-icon{opacity:1}
+.item-gate-body{padding:12px}
+.gate-earn-row{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.gate-earn-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px}
+.gate-earn-val{font-size:24px;font-weight:800;color:var(--text3);font-feature-settings:'zero' 0;line-height:1}
+.item-gate.pass .gate-earn-val{color:var(--tiffany-d)}
+.item-gate.partial .gate-earn-val{color:var(--amber)}
+.item-gate-status{margin-top:8px;padding:5px 10px;border-radius:20px;font-size:11px;font-weight:600;text-align:center;background:var(--soft);color:var(--text3)}
+.item-gate.pass .item-gate-status{background:var(--green-bg);color:var(--green)}
+.item-gate.fail .item-gate-status{background:var(--red-bg);color:var(--red)}
+.item-gate.partial .item-gate-status{background:var(--amber-bg);color:var(--amber)}
+.acct-dots{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px}
+.acct-dot{display:flex;flex-direction:column;align-items:center;gap:4px}
+.acct-dot-circle{width:38px;height:38px;border-radius:50%;border:2px solid var(--border);background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--text3);transition:all .2s}
+.acct-dot-circle.reached{background:var(--tiffany);border-color:var(--tiffany-d);color:#fff}
+.acct-dot-prize{font-size:11px;font-weight:600;color:var(--text3)}
+.acct-dot.reached .acct-dot-prize{color:var(--tiffany-d)}
+.prog-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px}
+.prog-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.prog-metric{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.4px}
+.prog-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(--soft);color:var(--text3)}
+.prog-badge.pass{background:var(--green-bg);color:var(--green)}
+.prog-badge.fail{background:var(--red-bg);color:var(--red)}
+.prog-val{font-size:18px;font-weight:800;color:var(--text);line-height:1.1;font-feature-settings:'zero' 0}
+.prog-tgt{font-size:10px;color:var(--text3);margin-top:1px}
+.prog-track{height:5px;border-radius:5px;background:var(--soft);overflow:hidden;margin-top:6px}
+.prog-fill{height:100%;border-radius:5px;transition:width .35s,background .35s;background:var(--red)}
+.prog-fill.pass{background:var(--green)}
+.prog-need{font-size:10px;font-weight:600;color:var(--red);margin-top:4px}
+.prog-need.pass{color:var(--green)}
+.formula-note{padding:8px 10px;background:#F0FAFA;border:1px solid var(--tiffany-l);border-radius:8px;font-size:11px;color:var(--text2);line-height:1.5;margin-top:6px}
+.formula-note span{font-weight:700;color:var(--tiffany-d)}
+.breakdown-table{display:flex;flex-direction:column}
+.brk-row{display:flex;justify-content:space-between;align-items:center;padding:10px 4px;border-bottom:1px solid var(--border)}
+.brk-row:last-child{border-bottom:none}
+.brk-label{font-size:13px;color:var(--text2)}
+.brk-val{font-size:13px;font-weight:700;color:var(--text)}
+.brk-val.prim{color:var(--tiffany-d)}
+.brk-row.total{padding:12px 8px;margin-top:6px;background:var(--soft);border-radius:8px;border:1px solid var(--border)}
+.brk-row.total .brk-label{font-size:14px;font-weight:700;color:var(--tiffany-d)}
+.brk-row.total .brk-val{font-size:20px;font-weight:800;color:var(--tiffany-d)}
+.so-tag{background:#f8fafc;border:1px dashed var(--border);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:14px;margin-top:14px}
+.so-tag-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--tiffany-d),#3ec9c3);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.so-tag-name{font-size:15px;font-weight:800;color:var(--tiffany-d)}
+.so-tag-detail{font-size:12px;color:var(--text2);font-weight:600;margin-top:2px}
+.so-tag-month{font-size:11px;color:var(--text3);margin-top:1px}
+.status-eligible{font-size:12px;font-weight:700;padding:7px 14px;background:var(--green-bg);color:var(--green);border-radius:20px;display:inline-block;border:1px solid #bbf7d0}
+.status-ineligible{font-size:12px;font-weight:700;padding:7px 14px;background:var(--red-bg);color:var(--red);border-radius:20px;display:inline-block;border:1px solid #fecaca}
+.status-partial{font-size:12px;font-weight:700;padding:7px 14px;background:var(--amber-bg);color:var(--amber);border-radius:20px;display:inline-block;border:1px solid #fed7aa}
+.status-pending{font-size:11px;font-weight:600;color:var(--text3);display:inline-block;text-align:right;line-height:1.5}
+.btn-reset{width:100%;height:48px;border:1.5px solid var(--tiffany);border-radius:12px;background:#fff;color:var(--tiffany);font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s}
+.btn-reset:active{background:var(--tiffany);color:#fff}
+
+/* Loan card completeness dot */
+.loan-status-dot{width:8px;height:8px;border-radius:50%;background:var(--req-border);flex-shrink:0;transition:background .2s;box-shadow:0 0 0 2px #fff,0 0 0 3px var(--req-border)}
+.loan-card.complete .loan-status-dot{background:var(--tiffany);box-shadow:0 0 0 2px #fff,0 0 0 3px var(--tiffany)}
+.loan-card.expanded .loan-status-dot{opacity:0;pointer-events:none}
+
+/* Skip link */
+.skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:200;background:var(--tiffany);color:#fff;font-size:14px;font-weight:700;padding:10px 16px;border-radius:0 0 8px 0}
+.skip-link:focus{position:fixed;left:0;top:0;width:auto;height:auto}
+/* Optional field note */
+.field-optional-note{font-size:10px;font-weight:400;color:var(--text3);text-transform:none}
+/* Inline style extractions */
+.acct-count-row{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.acct-count-label{font-size:12px;font-weight:600;color:var(--text2)}
+.acct-count-val{font-size:22px;font-weight:800;color:var(--text)}
+.loan-add-wrap{margin-top:8px}
+/* Print */
+@media print{
+  .app-header,.hero-wrap,.guide-card,.btn-reset,.btn-add-loan,.btn-rm-loan{display:none!important}
+  .page{padding:0!important;max-width:100%!important}
+  .section-card{break-inside:avoid;box-shadow:none!important;border:1px solid #ccc!important}
+  body{background:#fff!important}
+  .print-hdr{display:flex!important}
+}
+.print-hdr{display:none;align-items:center;gap:12px;padding:12px 0 10px;border-bottom:2px solid var(--tiffany);margin-bottom:14px}
+.print-hdr-mark{width:36px;height:36px;background:var(--navy);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff}
+.print-hdr-title{font-size:15px;font-weight:800;color:var(--navy)}
+.print-hdr-sub{font-size:11px;color:var(--text3);margin-top:1px}
+
+.celebrate-banner{display:none;background:linear-gradient(135deg,var(--tiffany-d),#3ec9c3);border-radius:var(--radius);padding:16px 20px;text-align:center;margin-bottom:0;position:relative;overflow:hidden}
+.celebrate-banner.show{display:block;animation:celebIn .4s ease}
+@keyframes celebIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+.celebrate-banner::before{content:'🎉';position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:32px;opacity:.3}
+.celebrate-banner::after{content:'🎉';position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:32px;opacity:.3}
+.celebrate-title{font-size:16px;font-weight:800;color:#fff;letter-spacing:-.3px}
+.celebrate-sub{font-size:12px;color:rgba(255,255,255,.8);margin-top:3px}
+.celebrate-amt{font-size:28px;font-weight:800;color:#fff;letter-spacing:-1px;margin-top:4px}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="app-header">
+  <div class="logo">
+    <div class="logo-mark">SO</div>
+    <div>
+      <div class="logo-title">Sale Office — Incentive Simulator</div>
+      <div class="logo-sub">ChokChey Finance</div>
+    </div>
+  </div>
+  <div class="hdr-month" id="hdrMonth">—</div>
+</header>
+
+<div class="hero-wrap">
+  <div class="hero-incentive">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-label">💰 Estimated Incentive</div>
+        <div class="hero-amount" id="heroAmt" aria-live="polite" aria-label="Estimated incentive amount">$0.00</div>
+        <div class="hero-sub">Updates live as you fill in loan data below</div>
+      </div>
+      <div id="heroStatus"><span class="status-pending">— Select position —</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="main-content">
+
+  <!-- Print header -->
+  <div class="print-hdr">
+    <div class="print-hdr-mark">SO</div>
+    <div>
+      <div class="print-hdr-title">Sale Officer — Incentive Simulator</div>
+      <div class="print-hdr-sub">ChokChey Finance Plc · <span id="phMonth"></span></div>
+    </div>
+  </div>
+
+  <div class="guide-card">
+    <button class="guide-toggle" onclick="toggleGuide(this)" aria-expanded="false" aria-controls="guideBody">
+      <div class="guide-toggle-left">
+        <span style="font-size:18px">📋</span>
+        <div>
+          <div class="guide-toggle-title">How to Use This Simulator</div>
+          <div class="guide-toggle-sub">Tap to expand instructions</div>
+        </div>
+      </div>
+      <span class="guide-arrow"><svg width="10" height="7" viewBox="0 0 10 7" fill="none"><path d="M1 1l4 4 4-4" stroke="rgba(255,255,255,0.8)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </button>
+    <div class="guide-body" id="guideBody" role="region" aria-label="How to Use">
+      <div class="guide-steps">
+        <div class="guide-step"><span class="guide-step-num">1</span><div class="guide-step-en">Pick your <strong>position</strong> and <strong>month</strong> to get started.</div></div>
+        <div class="guide-step"><span class="guide-step-num">2</span><div class="guide-step-en">Input each disbursed loan — enter <strong>Amount, Term, Admin Fee, Interest Rate</strong> and <strong>Monthly Fee</strong>. IRR and income are auto-calculated instantly.</div></div>
+        <div class="guide-step"><span class="guide-step-num">3</span><div class="guide-step-en">You will see how your incentive is earned through <strong>2 ways:</strong><br>· <strong>Item 1</strong> — Disbursed Accounts: 2 = $10, 3 = $30, ≥ 4 = $50<br>· <strong>Item 2</strong> — Dis. Amount + IRR: both must hit target to earn</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="section-card">
+    <div class="section-head">
+      <div class="section-icon">⚙️</div>
+      <div><h2>Select your position to get started</h2></div>
+    </div>
+    <div class="section-body">
+      <div class="field-row">
+        <div class="field required" id="fieldPos">
+          <div class="field-label">Position <span class="req-star-inline">*</span></div>
+          <select id="sPos" onchange="onPosChange();markFilled('fieldPos','sPos')">
+            <option value="">— Select —</option>
+            <option value="Sale Officer">Sale Officer</option>
+            <option value="Senior Sale Officer">Senior Sale Officer</option>
+          </select>
+        </div>
+        <div class="field required" id="fieldMonth">
+          <div class="field-label">Month <span class="req-star-inline">*</span></div>
+          <select id="sMonth" onchange="onMonthInput();markFilled('fieldMonth','sMonth')">
+            <option value="">— Select Month —</option>
+            <!-- Populated dynamically by JS -->
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <div class="field-label">👤 Name <span class="field-optional-note">(optional)</span></div>
+          <input type="text" id="sName" placeholder="Your name..." oninput="updTag()">
+        </div>
+        <div class="field">
+          <div class="field-label">🏢 Branch <span class="field-optional-note">(optional)</span></div>
+          <input type="text" id="sBranch" placeholder="e.g. HQ" oninput="updTag()">
+        </div>
+      </div>
+      <div class="plan-pill">📊 <span id="planSummary">Select a position to see your targets</span></div>
+    </div>
+  </div>
+
+  <!-- STEP 2: LOAN ENTRIES -->
+  <div class="section-card">
+    <div class="section-head">
+      <div class="section-icon">📋</div>
+      <div><h2>Enter each disbursed loan to calculate your Incentive</h2></div>
+    </div>
+    <div class="section-body" style="padding-bottom:12px">
+      <div class="loan-list" id="loanList"></div>
+      <div class="loan-add-wrap">
+        <button class="btn-add-loan" id="addLoanBtn">＋ Add Loan</button>
+        <div class="loan-count" id="lCount">2 / 10 loans</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: RESULTS -->
+  <div class="section-card">
+    <div class="section-head">
+      <div class="section-icon">🎯</div>
+      <div><h2>Check how much incentive you've earned</h2></div>
+    </div>
+    <div class="section-body">
+      <div class="item-gate" id="gate1">
+        <div class="item-gate-top">
+          <div><div class="item-gate-num-label">Item 1</div><div class="item-gate-title">Disbursement Accounts</div></div>
+          <span class="item-gate-pass-icon" id="gate1Icon">⬜</span>
+        </div>
+        <div class="item-gate-body">
+          <div class="gate-earn-row">
+            <span class="gate-earn-label">Incentive Earned</span>
+            <span class="gate-earn-val" id="i1earn">$0.00</span>
+          </div>
+          <div class="acct-count-row">
+            <span class="acct-count-label">Accounts Disbursed</span>
+            <span id="acctCount" class="acct-count-val">0 accounts</span>
+          </div>
+          <div class="acct-dots">
+            <div class="acct-dot" id="adot0"><div class="acct-dot-circle">1</div><div class="acct-dot-prize">—</div></div>
+            <div class="acct-dot" id="adot1"><div class="acct-dot-circle">2</div><div class="acct-dot-prize">$10</div></div>
+            <div class="acct-dot" id="adot2"><div class="acct-dot-circle">3</div><div class="acct-dot-prize">$30</div></div>
+            <div class="acct-dot" id="adot3"><div class="acct-dot-circle">4+</div><div class="acct-dot-prize">$50</div></div>
+          </div>
+          <div class="item-gate-status" id="gate1Status">— Enter loan data above to see your status —</div>
+        </div>
+      </div>
+      <div class="item-gate" id="gate2">
+        <div class="item-gate-top">
+          <div><div class="item-gate-num-label">Item 2</div><div class="item-gate-title">Disbursed Amount + IRR</div></div>
+          <span class="item-gate-pass-icon" id="gate2Icon">⬜</span>
+        </div>
+        <div class="item-gate-body">
+          <div class="gate-earn-row">
+            <span class="gate-earn-label">Incentive Earned</span>
+            <span class="gate-earn-val" id="i2earn">$0.00</span>
+          </div>
+          <div class="prog-pair">
+            <div>
+              <div class="prog-header"><span class="prog-metric">Dis. Amount</span><span class="prog-badge" id="amtBadge">—</span></div>
+              <div class="prog-val" id="amtVal">$0</div>
+              <div class="prog-tgt" id="amtTgt">target: —</div>
+              <div class="prog-track"><div class="prog-fill" id="amtBar" style="width:0%"></div></div>
+              <div class="prog-need" id="amtNeed">—</div>
+            </div>
+            <div>
+              <div class="prog-header"><span class="prog-metric">IRR (w.avg)</span><span class="prog-badge" id="irrBadge">—</span></div>
+              <div class="prog-val" id="irrVal">0.00%</div>
+              <div class="prog-tgt" id="irrTgt">target: ≥ —</div>
+              <div class="prog-track"><div class="prog-fill" id="irrBar" style="width:0%"></div></div>
+              <div class="prog-need" id="irrNeed">—</div>
+            </div>
+          </div>
+          <div class="formula-note">⚠ <span>Both</span> targets must reach 100% to earn. Formula: <span>Dis.Amt × (IRR / 12) × 15%</span></div>
+          <div class="item-gate-status" id="gate2Status">— Enter loan data above to see your status —</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="section-card">
+    <div class="section-head">
+      <div class="section-icon">🧮</div>
+      <div><h2>Review your total estimated incentive</h2></div>
+    </div>
+    <div class="section-body">
+      <!-- Celebration banner -->
+      <div class="celebrate-banner" id="celebBanner">
+        <div class="celebrate-title">🎉 Congratulations!</div>
+        <div class="celebrate-sub">You've qualified for both incentive items</div>
+        <div class="celebrate-amt" id="celebAmt">$0.00</div>
+      </div>
+      <div class="breakdown-table">
+        <div class="brk-row"><span class="brk-label">Item 1 — Disbursement Accounts</span><span class="brk-val" id="brkItem1">$0.00</span></div>
+        <div class="brk-row"><span class="brk-label">Item 2 — Dis. Amount + IRR</span><span class="brk-val" id="brkItem2">$0.00</span></div>
+
+        <div class="brk-row total"><span class="brk-label">💰 Total Estimated Incentive</span><span class="brk-val prim" id="brkTotal">$0.00</span></div>
+      </div>
+      <div class="so-tag">
+        <div class="so-tag-avatar">👤</div>
+        <div>
+          <div class="so-tag-name" id="tagName">—</div>
+          <div class="so-tag-detail" id="tagDetail">—</div>
+          <div class="so-tag-month" id="tagMonth">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-reset" onclick="resetAll()">🔄 Reset All Fields</button>
+</div>
+
+<script>
+const PLANS={'Sale Officer':{amt:25000,irr:18.6,minAcct:2},'Senior Sale Officer':{amt:30000,irr:18.6,minAcct:2}};
+let T={...PLANS['Sale Officer']};
+let loans=[{id:1,amount:'',term:'',adminFee:'',intRate:'',monthlyFee:''},{id:2,amount:'',term:'',adminFee:'',intRate:'',monthlyFee:''}];
+let nxtId=3;
+const $=id=>document.getElementById(id);
+const fmt=n=>'$'+(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const f$=n=>'$'+(n||0).toLocaleString('en-US',{maximumFractionDigits:0});
+const pct=n=>(n||0).toFixed(2)+'%';
+const clamp=v=>Math.min(100,Math.max(0,v));
+function fmtInput(v){const n=parseFloat(v);if(!v||isNaN(n))return '';return n===Math.floor(n)?n.toLocaleString('en-US'):n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function toggleGuide(btn){const body=btn.nextElementSibling,arrow=btn.querySelector('.guide-arrow'),open=body.classList.toggle('open');arrow.classList.toggle('open',open);btn.setAttribute('aria-expanded',open?'true':'false');const path=arrow.querySelector('path');if(path)path.setAttribute('stroke','rgba(255,255,255,0.8)')}
+function markFilled(fid,iid){$(fid).classList.toggle('filled',!!($(iid).value&&$(iid).value!==''))}
+function lm(l){const P=parseFloat(l.amount)||0,n=parseInt(l.term)||0;if(P<=0||n<=0)return{irr:0,income:0,valid:false};const a=(parseFloat(l.adminFee)||0)/100,r=(parseFloat(l.intRate)||0)/100,f=(parseFloat(l.monthlyFee)||0)/100,irrA=(r+f+a/n)*12;return{irr:irrA*100,income:P*irrA,valid:true}}
+function getKPIs(){const act=loans.filter(l=>parseFloat(l.amount)>0&&parseInt(l.term)>0),tAmt=act.reduce((s,l)=>s+(parseFloat(l.amount)||0),0),accts=act.length,wIRR=tAmt>0?act.reduce((s,l)=>s+lm(l).irr*(parseFloat(l.amount)||0),0)/tAmt:0,i1earn=accts>=4?50:accts===3?30:accts===2?10:0,acctPass=accts>=T.minAcct,amtPass=tAmt>=T.amt,irrPass=wIRR>=T.irr,i2pass=amtPass&&irrPass,i2earn=i2pass?act.reduce((s,l)=>s+(parseFloat(l.amount)||0)*(lm(l).irr/100/12)*0.15,0):0;return{tAmt,accts,wIRR,amtPass,irrPass,acctPass,i2pass,i1earn,i2earn,total:i1earn+i2earn}}
+function renderLoans(){
+  const list=$('loanList');list.innerHTML='';
+  loans.forEach((l,i)=>{
+    const m=lm(l),hd=m.valid,hasData=!!(l.amount||l.term||l.adminFee||l.intRate||l.monthlyFee);
+    const card=document.createElement('div');
+    const allFilled=!!(l.amount&&l.term&&l.adminFee&&l.intRate&&l.monthlyFee);
+    card.className='loan-card'+(hasData?' has-data':'')+(allFilled?' complete':'');
+    card.setAttribute('data-id',l.id);
+    const sumMain=hd?`${fmtInput(l.amount)} · ${l.term} months`:(hasData?'Incomplete — fill Amount + Term':'Tap to enter loan details');
+    const sumSub=hd?`IRR: ${pct(m.irr)} · Income: ${fmt(m.income)}`:(hasData?'IRR calculates once Amount & Term are set':'Enter Amount, Term, and Loan Fees to calculate IRR');
+    card.innerHTML=`
+      <div class="loan-card-header" onclick="toggleLoan(this)">
+        <div class="loan-num-badge">${i+1}</div>
+        <div class="loan-card-summary">
+          <div class="loan-card-main">${sumMain}</div>
+          <div class="loan-card-sub">${sumSub}</div>
+        </div>
+        <div class="loan-card-right">
+          ${hd?`<div class="loan-irr-badge">${pct(m.irr)}</div>`:''}
+          <div class="loan-status-dot"></div>
+          <div class="loan-expand-icon"><svg width="9" height="6" viewBox="0 0 10 7" fill="none"><path d="M1 1l4 4 4-4" stroke="var(--text3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+      <div class="loan-card-body">
+        <div class="loan-calc-row">
+          <div><div class="loan-calc-label">↳ IRR (Annual)</div><div class="loan-calc-val${hd?'':' empty'}" id="out-irr-${l.id}">${hd?pct(m.irr):'—'}</div></div>
+          <div><div class="loan-calc-label">↳ Annual Income</div><div class="loan-calc-val${hd?'':' empty'}" id="out-inc-${l.id}">${hd?fmt(m.income):'—'}</div></div>
+        </div>
+        <div class="loan-input-grid">
+          <div class="loan-field">
+            <div class="loan-field-label">Dis. Amount ($) <span class="loan-req-star">*</span> <span class="tip-icon" data-tip="Disbursed amount in USD. e.g. 5,000">?</span></div>
+            <input class="loan-inp${l.amount?' filled':''}" type="text" inputmode="numeric" data-lid="${l.id}" data-field="amount" value="${fmtInput(l.amount)}" placeholder="e.g. 5,000">
+          </div>
+          <div class="loan-field">
+            <div class="loan-field-label">Term (months) <span class="loan-req-star">*</span> <span class="tip-icon" data-tip="Repayment period in months. e.g. 12 or 24">?</span></div>
+            <input class="loan-inp${l.term?' filled':''}" type="number" data-lid="${l.id}" data-field="term" value="${l.term}" placeholder="e.g. 12">
+          </div>
+          <div class="loan-field">
+            <div class="loan-field-label">Admin Fee % <span class="loan-req-star">*</span> <span class="tip-icon" data-tip="One-time upfront fee as % of loan amount. e.g. 1.5 = 1.5%">?</span></div>
+            <input class="loan-inp${l.adminFee?' filled':''}" type="number" step="0.01" data-lid="${l.id}" data-field="adminFee" value="${l.adminFee}" placeholder="e.g. 1.5">
+          </div>
+          <div class="loan-field">
+            <div class="loan-field-label">Interest Rate % <span class="loan-req-star">*</span> <span class="tip-icon" data-tip="Monthly flat interest rate. e.g. 1.5 = 1.5% per month">?</span></div>
+            <input class="loan-inp${l.intRate?' filled':''}" type="number" step="0.01" data-lid="${l.id}" data-field="intRate" value="${l.intRate}" placeholder="e.g. 1.5">
+          </div>
+          <div class="loan-field" style="grid-column:1/-1">
+            <div class="loan-field-label">Monthly Fee % <span class="loan-req-star">*</span> <span class="tip-icon" data-tip="Recurring monthly service fee. e.g. 0.3 = 0.3% per month">?</span></div>
+            <input class="loan-inp${l.monthlyFee?' filled':''}" type="number" step="0.01" data-lid="${l.id}" data-field="monthlyFee" value="${l.monthlyFee}" placeholder="e.g. 0.3">
+          </div>
+        </div>
+        ${loans.length>1?`<button class="btn-rm-loan" data-lid="${l.id}">✕ Remove this loan</button>`:''}
+      </div>`;
+    list.appendChild(card);
+  });
+  attachLoanListeners();
+  $('lCount').textContent=`${loans.length} / 10 loans`;
+}
+function attachLoanListeners(){
+  const list=$('loanList');
+  list.querySelectorAll('.loan-inp').forEach(inp=>{
+    inp.addEventListener('input',function(){
+      const raw=this.value.replace(/,/g,'');
+      const filled=!!raw;
+      this.classList.toggle('filled',filled);
+      this.closest('.loan-field').classList.toggle('filled',filled);
+      upd(+this.dataset.lid,this.dataset.field,raw);
+    });
+    inp.addEventListener('focus',function(){if(this.dataset.field==='amount')this.value=this.value.replace(/,/g,'')});
+    inp.addEventListener('blur',function(){
+      if(this.dataset.field==='amount')this.value=fmtInput(this.value.replace(/,/g,''));
+      const filled=!!this.value.replace(/,/g,'');
+      this.classList.toggle('filled',filled);
+      this.closest('.loan-field').classList.toggle('filled',filled);
+    });
+  });
+  list.querySelectorAll('.btn-rm-loan').forEach(btn=>btn.addEventListener('click',()=>rmLoan(+btn.dataset.lid)));
+}
+function toggleLoan(header){
+  const card=header.closest('.loan-card'),wasOpen=card.classList.contains('expanded');
+  document.querySelectorAll('.loan-card.expanded').forEach(c=>c.classList.remove('expanded'));
+  if(!wasOpen)card.classList.add('expanded');
+}
+function updLoanOutputs(id){
+  const l=loans.find(x=>x.id===id);if(!l)return;
+  const m=lm(l),hd=m.valid;
+  const iEl=$(`out-irr-${id}`),nEl=$(`out-inc-${id}`);
+  if(iEl){iEl.textContent=hd?pct(m.irr):'—';iEl.className='loan-calc-val'+(hd?'':' empty')}
+  if(nEl){nEl.textContent=hd?fmt(m.income):'—';nEl.className='loan-calc-val'+(hd?'':' empty')}
+  const card=document.querySelector(`.loan-card[data-id="${id}"]`);if(!card)return;
+  const hasData=!!(l.amount||l.term||l.adminFee||l.intRate||l.monthlyFee);
+  const allFilled2=!!(l.amount&&l.term&&l.adminFee&&l.intRate&&l.monthlyFee);
+  card.classList.toggle('has-data',hasData);
+  card.classList.toggle('complete',allFilled2);
+  const mainEl=card.querySelector('.loan-card-main'),subEl=card.querySelector('.loan-card-sub'),right=card.querySelector('.loan-card-right'),badgeEl=card.querySelector('.loan-irr-badge');
+  if(mainEl)mainEl.textContent=hd?`${fmtInput(l.amount)} · ${l.term} months`:(hasData?'Incomplete — fill Amount + Term':'Tap to enter loan details');
+  if(subEl)subEl.textContent=hd?`IRR: ${pct(m.irr)} · Income: ${fmt(m.income)}`:(hasData?'IRR calculates once Amount & Term are set':'Enter Amount, Term, and Loan Fees to calculate IRR');
+  if(hd&&!badgeEl){const b=document.createElement('div');b.className='loan-irr-badge';b.textContent=pct(m.irr);right.insertBefore(b,right.querySelector('.loan-expand-icon'))}
+  else if(hd&&badgeEl){badgeEl.textContent=pct(m.irr)}
+  else if(!hd&&badgeEl){badgeEl.remove()}
+}
+function upd(id,f,v){loans=loans.map(l=>l.id===id?{...l,[f]:v}:l);updLoanOutputs(id);updKPI()}
+function addLoan(){if(loans.length>=10)return;const nid=nxtId++;loans.push({id:nid,amount:'',term:'',adminFee:'',intRate:'',monthlyFee:''});renderLoans();const nc=document.querySelector(`.loan-card[data-id="${nid}"]`);if(nc)nc.classList.add('expanded');updKPI()}
+function rmLoan(id){if(loans.length<=1)return;loans=loans.filter(l=>l.id!==id);renderLoans();updKPI()}
+function onPosChange(){const pos=$('sPos').value;T={...(PLANS[pos]||PLANS['Sale Officer'])};$('planSummary').textContent=pos?`Accounts ≥ ${T.minAcct} · Dis. Amount ${f$(T.amt)} · IRR ≥ ${pct(T.irr)}`:'Select a position to see your targets';$('amtTgt').textContent=pos?`target: ${f$(T.amt)}`:'target: —';$('irrTgt').textContent=pos?`target: ≥ ${pct(T.irr)}`:'target: ≥ —';updTag();updKPI()}
+function onMonthInput(){const m=$('sMonth').value;$('hdrMonth').textContent=m||'—';$('tagMonth').textContent=m||'—';const ph=document.getElementById('phMonth');if(ph)ph.textContent=m||'—'}
+function updTag(){const pos=$('sPos').value,name=$('sName').value,branch=$('sBranch').value;$('tagName').textContent=name||'—';$('tagDetail').textContent=[pos||'—',branch?`· ${branch}`:''].filter(Boolean).join(' ')}
+function updKPI(){
+  const k=getKPIs(),pos=$('sPos').value;
+  $('i1earn').textContent=fmt(k.i1earn);
+  $('acctCount').textContent=k.accts+(k.accts===1?' account':' accounts');
+  for(let i=0;i<4;i++){const dot=$(`adot${i}`),circle=dot.querySelector('.acct-dot-circle'),reached=k.accts>i;circle.classList.toggle('reached',reached);dot.classList.toggle('reached',reached)}
+  const g1=$('gate1');g1.className='item-gate';
+  if(k.accts===0){$('gate1Icon').textContent='⬜';$('gate1Status').textContent='— Enter loan data above to see your status —'}
+  else if(k.acctPass){g1.classList.add('pass');$('gate1Icon').textContent='✅';const nxt=k.accts===2?' · +1 for $30':k.accts===3?' · +1 for $50':'';$('gate1Status').textContent=`✅ ${k.accts} accounts — ${fmt(k.i1earn)} earned${nxt}`}
+  else{g1.classList.add('fail');$('gate1Icon').textContent='❌';$('gate1Status').textContent=`❌ Need ${T.minAcct-k.accts} more account${T.minAcct-k.accts>1?'s':''} to earn Item 1`}
+  $('i2earn').textContent=fmt(k.i2earn);
+  const amtPct=pos?clamp(k.tAmt/T.amt*100):0;
+  $('amtVal').textContent=f$(k.tAmt);$('amtBar').style.width=amtPct+'%';$('amtBar').className='prog-fill'+(k.amtPass?' pass':'');
+  $('amtBadge').textContent=pos?(k.amtPass?'✓ Pass':'✗ Fail'):'—';$('amtBadge').className='prog-badge'+(pos?(k.amtPass?' pass':' fail'):'');
+  $('amtNeed').textContent=pos?(k.amtPass?`${Math.round(amtPct)}% achieved`:`Need ${f$(T.amt-k.tAmt)} more`):'—';$('amtNeed').className='prog-need'+(k.amtPass?' pass':'');
+  const irrPct=(pos&&T.irr>0)?clamp(k.wIRR/T.irr*100):0;
+  $('irrVal').textContent=pct(k.wIRR);$('irrBar').style.width=irrPct+'%';$('irrBar').className='prog-fill'+(k.irrPass?' pass':'');
+  $('irrBadge').textContent=pos?(k.irrPass?'✓ Pass':'✗ Fail'):'—';$('irrBadge').className='prog-badge'+(pos?(k.irrPass?' pass':' fail'):'');
+  $('irrNeed').textContent=pos?(k.irrPass?`${Math.round(irrPct)}% achieved`:`Need ≥ ${pct(T.irr)}`):'—';$('irrNeed').className='prog-need'+(k.irrPass?' pass':'');
+  const g2=$('gate2');g2.className='item-gate';
+  if(!pos||(k.tAmt===0&&k.wIRR===0)){$('gate2Icon').textContent='⬜';$('gate2Status').textContent='— Enter loan data above to see your status —'}
+  else if(k.i2pass){g2.classList.add('pass');$('gate2Icon').textContent='✅';$('gate2Status').textContent=`✅ Both targets met — Earned ${fmt(k.i2earn)}`}
+  else if(k.amtPass||k.irrPass){g2.classList.add('partial');$('gate2Icon').textContent='⚠️';$('gate2Status').textContent=`⚠ Partial — ${!k.amtPass?'Disbursed Amount':'IRR'} not yet at target`}
+  else{g2.classList.add('fail');$('gate2Icon').textContent='❌';$('gate2Status').textContent='❌ Both Disbursed Amount and IRR must reach 100%'}
+  $('brkItem1').textContent=fmt(k.i1earn);$('brkItem2').textContent=fmt(k.i2earn);$('brkTotal').textContent=fmt(k.total);
+
+  // Celebration
+  const cb=$('celebBanner');
+  if(k.acctPass&&k.i2pass){cb.classList.add('show');$('celebAmt').textContent=fmt(k.total);}
+  else{cb.classList.remove('show');}
+  $('heroAmt').textContent=fmt(k.total);
+  const hs=$('heroStatus');
+  if(!pos){hs.innerHTML='<span class="status-pending">— Select your position —</span>'}
+  else if(k.accts===0&&k.tAmt===0){hs.innerHTML='<span class="status-pending">— Enter loans to begin —</span>'}
+  else if(k.acctPass&&k.i2pass){hs.innerHTML='<span class="status-eligible">✅ FULLY QUALIFIED</span>'}
+  else if(k.acctPass||k.i2pass){hs.innerHTML='<span class="status-partial">⚠ PARTIALLY EARNED</span>'}
+  else{hs.innerHTML='<span class="status-ineligible">❌ NOT QUALIFIED</span>'}
+}
+function resetAll(){
+  ['sPos','sName','sBranch','sMonth'].forEach(id=>$(id).value='');
+  $('hdrMonth').textContent='—';$('planSummary').textContent='Select a position to see your targets';
+  ['fieldPos','fieldMonth'].forEach(id=>$(id).classList.remove('filled'));
+  loans=[{id:1,amount:'',term:'',adminFee:'',intRate:'',monthlyFee:''},{id:2,amount:'',term:'',adminFee:'',intRate:'',monthlyFee:''}];
+  nxtId=3;T={...PLANS['Sale Officer']};renderLoans();onPosChange();updTag();
+}
+(function(){
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const d=new Date(),sel=$('sMonth');
+  for(let i=-3;i<=12;i++){const dt=new Date(d.getFullYear(),d.getMonth()+i,1),lbl=months[dt.getMonth()]+' '+dt.getFullYear(),opt=document.createElement('option');opt.value=lbl;opt.textContent=lbl;sel.appendChild(opt);}
+  const cur=months[d.getMonth()]+' '+d.getFullYear();
+  for(let i=0;i<sel.options.length;i++){if(sel.options[i].value===cur){sel.selectedIndex=i;break;}}
+  const ms=sel.value;
+  $('hdrMonth').textContent=ms||'—';
+  $('tagMonth').textContent=ms||'—';
+  if(sel.value)$('fieldMonth').classList.add('filled');
+})();
+renderLoans();
+const first=document.querySelector('.loan-card');if(first)first.classList.add('expanded');
+updKPI();
+$('addLoanBtn').addEventListener('click',addLoan);
+function adjustOffset(){requestAnimationFrame(function(){const hdr=document.querySelector('.app-header'),hero=document.querySelector('.hero-wrap'),page=document.querySelector('.page');if(!hdr||!hero||!page)return;const hh=hdr.offsetHeight;hero.style.top=hh+'px';page.style.paddingTop=(hh+hero.offsetHeight+14)+'px'})}
+adjustOffset();
+document.addEventListener('DOMContentLoaded',adjustOffset);
+window.addEventListener('load',adjustOffset);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(adjustOffset);
+window.addEventListener('resize',adjustOffset);
+</script>
+
+<div id="tip-bubble"></div>
+<script>
+(function(){
+  const bubble = document.getElementById('tip-bubble');
+  function showTip(icon){
+    const tip = icon.getAttribute('data-tip');
+    if(!tip) return;
+    bubble.textContent = tip;
+    bubble.style.display = 'block';
+    const r = icon.getBoundingClientRect();
+    const bw = 200;
+    let left = r.left + r.width/2 - bw/2;
+    let top  = r.top - bubble.offsetHeight - 8;
+    if(left < 8) left = 8;
+    if(left + bw > window.innerWidth - 8) left = window.innerWidth - bw - 8;
+    if(top < 8) top = r.bottom + 8;
+    bubble.style.left = left + 'px';
+    bubble.style.top  = top  + 'px';
+  }
+  document.addEventListener('mouseover', function(e){
+    const icon = e.target.closest('.tip-icon');
+    if(icon) showTip(icon); else bubble.style.display='none';
+  });
+  document.addEventListener('mouseout', function(e){
+    if(e.target.closest('.tip-icon')) bubble.style.display='none';
+  });
+})();
+</script>
+
+</body>
+</html>
